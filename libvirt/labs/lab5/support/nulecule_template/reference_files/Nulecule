@@ -1,0 +1,32 @@
+---
+specversion: 0.0.2
+
+id: summit-2015-wp
+metadata:
+  name: Wordpress
+  appversion: v1.0.0
+  description: >
+    WordPress is web software you can use to create a beautiful
+    website or blog. We like to say that WordPress is both free
+    and priceless at the same time.
+graph:
+  - name: mariadb
+    source: "docker://mariadb-atomicapp"
+  - name: wordpress
+    artifacts:
+      kubernetes:
+        - file://artifacts/kubernetes/wordpress-pod.yaml
+        - file://artifacts/kubernetes/wordpress-service.yaml
+    params:
+      - name: image
+        description: wordpress docker image
+      - name: publicip
+        description: wordpress frontend IP address
+      - name: db_user
+        description: wordpress database username
+        default: wp_user
+      - name: db_pass
+        description: wordpress database password
+      - name: db_name
+        description: wordpress database name
+        default: db_wordpress

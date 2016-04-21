@@ -1,0 +1,51 @@
+FROM registry.access.redhat.com/rhel  
+
+>>> No tags on image specification - updates could break things
+
+MAINTAINER Student <student@foo.io>
+
+# ADD set up scripts
+ADD  scripts /scripts
+
+>>> If a local script changes then we have to rebuild from scratch
+
+RUN chmod 755 /scripts/*
+
+# Add in custom yum repository and update
+ADD ./local.repo /etc/yum.repos.d/local.repo
+RUN yum -y update
+
+>>> Running a yum clean all in the same statement would mean that we
+>>> wouldn't have junk in our intermediate cached image
+
+# Common Deps
+RUN yum -y install openssl
+RUN yum -y install psmisc 
+
+# Deps for wordpress
+RUN yum -y install httpd 
+RUN yum -y install php 
+RUN yum -y install php-mysql 
+RUN yum -y install php-gd
+RUN yum -y install tar
+
+# Deps for mariadb
+RUN yum -y install mariadb-server 
+RUN yum -y install net-tools
+RUN yum -y install hostname
+
+>>> Can group all of the above into one yum statement to minimize 
+>>> intermediate layers.
+
+# Add in wordpress sources 
+COPY latest.tar.gz /latest.tar.gz
+RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1 
+RUN rm /latest.tar.gz
+RUN chown -R apache:apache /var/www/
+
+>>> Can group above statements into one multiline statement to minimize 
+>>> space used by intermediate layers. (i.e. latest.tar.gz would not be 
+>>> stored in any image).
+
+EXPOSE 80
+CMD ["/bin/bash", "/scripts/start.sh"]

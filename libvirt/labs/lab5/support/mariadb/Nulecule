@@ -1,0 +1,26 @@
+---
+specversion: 0.0.2
+
+id: mariadb-summit2015
+metadata:
+  name: MariaDB
+  appversion: v1.0.0
+  description: An enhanced, drop-in replacement for MySQL
+
+graph:
+  - name: mariadb
+    artifacts:
+      kubernetes:
+        - file://artifacts/kubernetes/mariadb-pod.yaml
+        - file://artifacts/kubernetes/mariadb-service.yaml
+    params:
+      - name: image
+        description: mariadb docker image
+      - name: db_user
+        description: wordpress database username
+        default: wp_user
+      - name: db_pass
+        description: wordpress database password
+      - name: db_name
+        description: wordpress database name
+        default: db_wordpress

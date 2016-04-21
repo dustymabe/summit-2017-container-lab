@@ -1,0 +1,26 @@
+---
+specversion: 0.0.2
+
+id: 191131-abcd
+metadata:
+  name: my app
+  appversion: v1.0.0
+  description: some application
+  license: 
+    name: Apache 2.0
+    url: www.example.com/license
+
+graph:
+  - name: somedb
+    source: "docker://registry.example.com/some/database"
+  - name: mycode
+    artifacts:
+      kubernetes:
+        - file://artifacts/kubernetes/pod.json
+    params:
+      - name: password
+        description: passphrase
+      - name: username
+        description: username
+        default: admin
+
