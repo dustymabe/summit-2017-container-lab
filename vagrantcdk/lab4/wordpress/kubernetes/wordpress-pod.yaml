@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wordpress
+  labels:
+    name: wpfrontend
+spec:
+  containers:
+  - name: wordpress
+    image: dev.example.com:5000/wordpress
+    ports:
+      - containerPort: 80
+    env:
+      - name: DB_ENV_DBUSER
+        value: user
+      - name: DB_ENV_DBPASS
+        value: mypassword
+      - name: DB_ENV_DBNAME
+        value: mydb

@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# The private network IP of the VM. You will use this IP to connect to OpenShift.
+PUBLIC_ADDRESS="10.1.2.2"
+
+# Number of virtualized CPUs
+VM_CPU = ENV['VM_CPU'] || 2
+
+# Amount of available RAM
+VM_MEMORY = ENV['VM_MEMORY'] || 3072
+
+# Validate required plugins
+REQUIRED_PLUGINS = %w(vagrant-service-manager vagrant-registration)
+errors = []
+
+def message(name)
+  "#{name} plugin is not installed, run `vagrant plugin install #{name}` to install it."
+end
+# Validate and collect error message if plugin is not installed
+REQUIRED_PLUGINS.each { |plugin| errors << message(plugin) unless Vagrant.has_plugin?(plugin) }
+unless errors.empty?
+  msg = errors.size > 1 ? "Errors: \n* #{errors.join("\n* ")}" : "Error: #{errors.first}"
+  fail Vagrant::Errors::VagrantError.new, msg
+end
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "cdkv2"
+
+  # Mount this directory into the guest under ~/labs
+  config.vm.synced_folder "./", "/home/vagrant/labs", type: "sshfs"
+
+  config.vm.provider "virtualbox" do |v, override|
+    v.memory = VM_MEMORY
+    v.cpus   = VM_CPU
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
+  config.vm.provider "libvirt" do |v, override|
+    v.memory = VM_MEMORY
+    v.cpus   = VM_CPU
+    v.driver = "kvm"
+  end
+
+  config.vm.network "private_network", ip: "#{PUBLIC_ADDRESS}"
+
+  if ENV.has_key?('SUB_USERNAME') && ENV.has_key?('SUB_PASSWORD')
+    config.registration.username = ENV['SUB_USERNAME']
+    config.registration.password = ENV['SUB_PASSWORD']
+  end
+
+  config.servicemanager.services = "docker"
+end

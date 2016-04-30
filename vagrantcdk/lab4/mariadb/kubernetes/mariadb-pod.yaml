@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mariadb
+  labels:
+    name: mariadb
+spec:
+  containers:
+    - name: mariadb
+      image: dev.example.com:5000/mariadb
+      ports:
+        - containerPort: 3306
+      env:
+        - name: DBUSER
+          value: user
+        - name: DBPASS
+          value: mypassword
+        - name: DBNAME
+          value: mydb
