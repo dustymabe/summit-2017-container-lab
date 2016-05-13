@@ -38,6 +38,8 @@ Perform the following commands as root unless instructed otherwise.
 
 ```bash
 cat /usr/lib/systemd/system/docker.service
+cat /usr/lib/systemd/system/docker-storage-setup.service
+cat /usr/lib/systemd/system/docker-registry.service
 cat /etc/sysconfig/docker
 cat /etc/sysconfig/docker-storage
 cat /etc/sysconfig/docker-network
