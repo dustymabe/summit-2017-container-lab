@@ -1,10 +1,7 @@
 #!/bin/bash
 #execute the functionality in lab1 that other labs depend on 
 
-cd ~/lab1
-docker build -t redhat/apache .
-docker run -dt -p 80:80 --net=host --name apache redhat/apache
-docker ps
+cd ~/labs/lab1
 
 docker build -t registry registry/
 docker run --restart="always" --name registry -p 5000:5000 -d registry

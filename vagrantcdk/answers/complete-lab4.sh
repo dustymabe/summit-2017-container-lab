@@ -1,31 +1,22 @@
 #!/bin/bash
-#execute the functionality in lab2 that other labs depend on 
+# execute the functionality in lab4 that other labs depend on 
+set -ex
 
-cd ~/lab4
+# Start openshift since we haven't started it already
+sudo systemctl start openshift
 
-echo "make sure your /etc/hosts file has the two servers listed"
+mkdir -p ~/workspace
+cp -R ~/labs/lab4/* ~/workspace/
+cd ~/workspace
 
-TARGET_IP='dev.example.com:5000'
+# Login to openshift - creates .kubeconfig file 
+oc login <<EOF
+openshift-dev
+devel
+EOF
 
-cp -R ~/lab4/* ~/workspace
-
-sed -i -e "s/YOUR_LAB_DEV_MACHINE/$TARGET_IP\/wordpress/g" ~/workspace/wordpress/kubernetes/wordpress-pod.yaml
-sed -i -e "s/YOUR_LAB_DEV_MACHINE/$TARGET_IP\/mariadb/g" ~/workspace/mariadb/kubernetes/mariadb-pod.yaml 
-
-mkdir ~/.kube
-touch ~/.kube/.kubeconfig
-
-kubectl config set-cluster local --server=http://localhost:8080
-kubectl config set-context local-context --cluster=local
-kubectl config use-context local-context
-
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-pod.yaml &&  kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-service.yaml 
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-pod.yaml && kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-rc.yaml && kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-service.yaml 
-  
-kubectl config set-cluster remote --server=summit_rhel_deploy_target:8080 
-kubectl config set-context remote-context --cluster=remote
-kubectl config use-context remote-context
-
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-pod.yaml &&  kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-service.yaml 
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-pod.yaml && kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-rc.yaml && kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-service.yaml 
+oc create -f ./mariadb/kubernetes/mariadb-pod.yaml
+oc create -f ./mariadb/kubernetes/mariadb-service.yaml 
+oc create -f ./wordpress/kubernetes/wordpress-pod.yaml 
+oc create -f ./wordpress/kubernetes/wordpress-service.yaml 
 
