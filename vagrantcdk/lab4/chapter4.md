@@ -108,6 +108,38 @@ Starting and stopping is definitely easy, and fast. However, it is still pretty 
 What if we could automate the recovery? Or, in buzzword terms, "ensure the service 
 remains up"? Enter Kubernetes/Openshift.
 
+## Starting Openshift on the CDK
+
+The Vagrantfile we used to bring up the CDK in lab1 does not start
+OpenShift by default. We chose to do this so that we could play around
+with docker first without having Openshift running. Let's start
+Openshift now.
+
+```bash
+systemctl start openshift
+```
+
+To check if openshift is running run:
+
+```bash
+# systemctl status openshift
+# docker ps | grep openshift
+```
+
+Now log in to openshift with username ```openshift-dev``` and password
+```devel```:
+
+```bash
+$ oc login -u openshift-dev -p devel https://deploy.example.com/
+Login successful.
+
+Using project "sample-project".
+```
+
+You are now logged in to openshift and are using the ```sample-project``` 
+project. You can also view the openshift web console by using the same 
+credentials to log in to ```https://dev.example.com:8443``` using firefox.
+
 ## Pod Creation
 
 Let's get started by talking about a pod. A pod is a set of containers that provide 
@@ -250,7 +282,8 @@ oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
 oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
 ```
 
-Now, I know i just said, ```kind``` is a parameter, but, as this is a create statement, it looks in the ```-f``` file for the ```kind```.
+Now, I know i just said, ```kind``` is a parameter, but, as this is a create 
+statement, it looks in the ```-f``` file for the ```kind```.
 
 Ok, let's see if they came up:
 
@@ -265,7 +298,7 @@ If you have any issues with the pods transistioning from a "Pending"
 state, you can check out the logs for each service.
 
 ```bash
-journalctl -fl -u kube-apiserver -u kube-controller-manager -u kube-proxy -u kube-scheduler -u kubelet -u etcd -u docker
+journalctl -fl -u openshift
 ```
 
 Ok, now let's kill them off so we can introduce the services that will
@@ -402,101 +435,28 @@ we make it a lot less painful!
 ## Remote Deployment
 
 
-XXX This is where we should now use `oc login` instead.
-
 Now that we are satisfied that our containers and Kubernetes definitions work, 
-let's try deploying it to a remote server.
+let's try deploying it to a "deployment" server running Atomic Host.
 
-First, we have to add the remote cluster to our local configuration. However,
-before we do that, let's take a look at what we have already. Also, notice that
-the ```kubectl config``` follows the `<noun>` `<verb>` model. In other words,
-```kubectl``` `<noun>` = ```config``` `<verb>` = ```view```
+First, let's log in to the remote cluster:
 
 ```bash
-kubectl config view
-``` 
+oc login --insecure-skip-tls-verify=true \
+    -u openshift-dev -p devel https://deploy.example.com/
+```
 
-Not much right? If you notice, we don't even have any information about the 
-current context. In order to avoid losing our local connection, why don't 
-we set up the local machine as a cluster first, before we add the remote.
-However, in order for the configuration to work correctly, we need to touch
-the config file first.
+This will create a new configuration file in ~/.kube/config. This
+file stores information about how to connect to the remote Openshift
+cluster.
+
+Let's create a new project in the remote cluster:
 
 ```bash
-mkdir ~/.kube
-touch ~/.kube/.kubeconfig
+oc new-project production
 ```
 
-First we create the cluster (after each step, I recommend you take a look 
-at the current config with a ```view```):
-
-```bash
-kubectl config set-cluster local --server=http://localhost:8080
-kubectl config view
-```
-
-Then we add it to a context:
-
-```bash
-kubectl config set-context local-context --cluster=local
-kubectl config view
-```
-
-Now we switch to that context:
-
-```bash
-kubectl config use-context local-context
-kubectl config view
-```
-
-Strictly speaking, a lot of the above is not necessary, however, it is good 
-to get in to the habit of using "contexts" then when you are using ```kubectl```
-with properly configured security and the like, you will run in to less 
-"mysterious" headaches trying to figure out why you can't deploy.
-
-Now, lets test it out.
-
-```bash
-oc get pods
-oc get services
-```
-
-Did you get your pods and services back? If not, you should check your config.
-Your ```config view``` result should look like this:
-
-```bash
-oc config view
-```
-Result:
-
-```
-apiVersion: v1
-clusters:
-- cluster:
-    server: http://localhost:8080
-  name: local
-contexts:
-- context:
-    cluster: local
-    user: ""
-  name: local-context
-current-context: local-context
-kind: Config
-preferences: {}
-users: []
-```
-
-All right, let's switch to the remote.
-
-```bash
-oc config set-cluster remote --server=http://192.168.135.3:8080
-oc config set-context remote-context --cluster=remote
-oc config use-context remote-context
-oc config view
-```
-
-You should now have ```current-context: remote-context```. Now, let's prove 
-we are talking to the remote:
+You should now be using the ```production``` project. Let's check the
+pods/services:
 
 ```bash
 oc get pods
@@ -504,35 +464,37 @@ oc get services
 ```
 
 Nothing there, right? Ok, so let's start the bits up on the remote deployment
-server.  Before we do that, we need to change the ```publicIP``` address in the service
-file so that it uses the IP address on the remote host that we are going to deploy
-the pod onto.
+server. 
 
-Open the new service file and put the following definition in it. 
+                Before we do that, we need to change the ```publicIP``` address in the service
+                file so that it uses the IP address on the remote host that we are going to deploy
+                the pod onto.
 
-```bash
-vi ~/workspace/wordpress/openshift/wordpress-service.yaml
-```
+                Open the new service file and put the following definition in it. 
 
-```
-kind: Service
-apiVersion: v1beta3
-id: wpfrontend
-metadata:
-  labels:
-    name: wpfrontend
-  name: wpfrontend
-spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
-  selector:
-    name: wpfrontend
-  publicIPs:
-  - 192.168.135.3
-containerPort: 80
-```
+                ```bash
+                vi ~/workspace/wordpress/openshift/wordpress-service.yaml
+                ```
+
+                ```
+                kind: Service
+                apiVersion: v1beta3
+                id: wpfrontend
+                metadata:
+                  labels:
+                    name: wpfrontend
+                  name: wpfrontend
+                spec:
+                  ports:
+                  - port: 80
+                    protocol: TCP
+                    targetPort: 80
+                  selector:
+                    name: wpfrontend
+                  publicIPs:
+                  - 192.168.135.3
+                containerPort: 80
+                ```
 
 ```bash
 oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
