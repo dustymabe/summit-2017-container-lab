@@ -30,6 +30,15 @@ Vagrant.configure(2) do |config|
   # Mount this directory into the guest under ~/labs
   config.vm.synced_folder "./", "/home/vagrant/labs", type: "sshfs"
 
+  # Add dev.example.com to /etc/hosts
+  config.vm.provision "shell",
+    privileged: true,
+    inline: "grep dev.example.com /etc/hosts || echo '127.0.0.1 dev.example.com' >> /etc/hosts"
+  # Add deploy.example.com to /etc/hosts
+  config.vm.provision "shell",
+    privileged: true,
+    inline: "grep deploy.example.com /etc/hosts || echo '10.1.2.3 deploy.example.com' >> /etc/hosts"
+
   config.vm.provider "virtualbox" do |v, override|
     v.memory = VM_MEMORY
     v.cpus   = VM_CPU
