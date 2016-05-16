@@ -125,7 +125,7 @@ Let's make a pod for mariadb. Open a file called mariadb-pod.yaml.
 
 ```bash
 mkdir -p ~/workspace/mariadb/kubernetes
-vi ~/workspace/mariadb/kubernetes/mariadb-pod.yaml
+vi ~/workspace/mariadb/openshift/mariadb-pod.yaml
 ```
 
 In that file, let's put in the pod identification information:
@@ -205,8 +205,8 @@ spec:
 Our wordpress container is much less complex, so let's do that pod next.
 
 ```bash
-mkdir -p ~/workspace/wordpress/kubernetes
-vi ~/workspace/wordpress/kubernetes/wordpress-pod.yaml
+mkdir -p ~/workspace/wordpress/openshift
+vi ~/workspace/wordpress/openshift/wordpress-pod.yaml
 ```
 
 ```
@@ -239,15 +239,15 @@ ones in the mariadb pod. Lastly, just to show you aren't bound to the image or
 pod names, we also changed the ```labels``` value to "wpfronted".
 
 Ok, so, lets launch our pods and make sure they come up correctly. In
-order to do this, we need to introduce the ```kubectl``` command which is
-what drives Kubernetes. Generally, speaking, the format of ```kubectl```
+order to do this, we need to introduce the ```oc``` command which is
+what drives openshift. Generally, speaking, the format of ```oc```
 commands is ```kubetctl <operation> <kind>```. Where ```<operation>``` is
 something like ```create```, ```get```, ```remove```, etc. and ```kind```
 is the ```kind``` from the pod files.
 
 ```bash
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-pod.yaml
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-pod.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
 ```
 
 Now, I know i just said, ```kind``` is a parameter, but, as this is a create statement, it looks in the ```-f``` file for the ```kind```.
@@ -255,7 +255,7 @@ Now, I know i just said, ```kind``` is a parameter, but, as this is a create sta
 Ok, let's see if they came up:
 
 ```bash
-kubectl get pods
+oc get pods
 ```
 
 Which should output two pods, one called ```mariadb``` and one called 
@@ -272,8 +272,8 @@ Ok, now let's kill them off so we can introduce the services that will
 let them more dynamically find each other.
 
 ```bash
-kubectl delete pod mariadb
-kubectl delete pod wordpress
+oc delete pod mariadb
+oc delete pod wordpress
 ```
 
 **Note** you used the "singular" form here on the ```kind```, which, for 
@@ -282,13 +282,13 @@ kubectl delete pod wordpress
          information you want.
 
 ## Service Creation
-Now we want to create Kubernetes Services for our pods so that Kubernetes 
+Now we want to create Kubernetes Services for our pods so that Openshift 
 can introduce a layer of indirection between the pods. 
 
 Let's start with mariadb. Open up a service file:
 
 ```bash
-vi ~/workspace/mariadb/kubernetes/mariadb-service.yaml
+vi ~/workspace/mariadb/openshift/mariadb-service.yaml
 ```
 
 and insert the following content:
@@ -315,7 +315,7 @@ The ```selector``` is how the service finds the pod that provides its functional
 OK, now let's move on to the wordpress service. Open up a new service file:
 
 ```bash
-vi ~/workspace/wordpress/kubernetes/wordpress-service.yaml
+vi ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
 and insert:
@@ -350,39 +350,39 @@ with that at the end of this lab if you have time.
 Now let's get things going. Start mariadb:
 
 ```bash
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-pod.yaml
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-service.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml
 ```
 
 Now let's start wordpress.
 
 ```bash
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-pod.yaml
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-service.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
 OK, now let's make sure everything came up correctly:
 
 ```bash
-kubectl get pods
-kubectl get services
+oc get pods
+oc get services
 ```
 
 **Note** these may take a while to get to a ```RUNNING``` state as it pulls 
-         the image from the registry, spin up the containers, do the kubernetes 
+         the image from the registry, spin up the containers, do the openshift 
          magic, etc. 
 
 Eventually, you should see:
 
 ```bash
-# kubectl get pods
+# oc get pods
 POD         IP           CONTAINER(S)   IMAGE(S)                         HOST                  LABELS            STATUS    CREATED
 mariadb     172.17.0.1   mariadb        dev.example.com:5000/mariadb     127.0.0.1/127.0.0.1   name=mariadb      Running   2 hours
 wordpress   172.17.0.2   wordpress      dev.example.com:5000/wordpress   127.0.0.1/127.0.0.1   name=wpfrontend   Running   2 hours
 ```
 
 ```bash
-# kubectl get services
+# oc get services
 NAME            LABELS                                    SELECTOR          IP               PORT(S)
 kubernetes      component=apiserver,provider=kubernetes   <none>            10.254.0.2       443/TCP
 kubernetes-ro   component=apiserver,provider=kubernetes   <none>            10.254.0.1       80/TCP
@@ -457,15 +457,15 @@ with properly configured security and the like, you will run in to less
 Now, lets test it out.
 
 ```bash
-kubectl get pods
-kubectl get services
+oc get pods
+oc get services
 ```
 
 Did you get your pods and services back? If not, you should check your config.
 Your ```config view``` result should look like this:
 
 ```bash
-kubectl config view
+oc config view
 ```
 Result:
 
@@ -489,18 +489,18 @@ users: []
 All right, let's switch to the remote.
 
 ```bash
-kubectl config set-cluster remote --server=http://192.168.135.3:8080
-kubectl config set-context remote-context --cluster=remote
-kubectl config use-context remote-context
-kubectl config view
+oc config set-cluster remote --server=http://192.168.135.3:8080
+oc config set-context remote-context --cluster=remote
+oc config use-context remote-context
+oc config view
 ```
 
 You should now have ```current-context: remote-context```. Now, let's prove 
 we are talking to the remote:
 
 ```bash
-kubectl get pods
-kubectl get services
+oc get pods
+oc get services
 ```
 
 Nothing there, right? Ok, so let's start the bits up on the remote deployment
@@ -511,7 +511,7 @@ the pod onto.
 Open the new service file and put the following definition in it. 
 
 ```bash
-vi ~/workspace/wordpress/kubernetes/wordpress-service-remote.yaml
+vi ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
 ```
@@ -535,24 +535,24 @@ containerPort: 80
 ```
 
 ```bash
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-pod.yaml
-kubectl create -f ~/workspace/mariadb/kubernetes/mariadb-service.yaml
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-pod.yaml
-kubectl create -f ~/workspace/wordpress/kubernetes/wordpress-service-remote.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-service.yaml
 ```
 
 Now we should see similar results as our local machine from:
 
 ```bash
-kubectl get pods
-kubectl get services
+oc get pods
+oc get services
 ```
 
 Now we can check to make sure the site is running. However, first we need the
 IP for it.
 
 ```bash
-kubectl get endpoints
+oc get endpoints
 ```
 
 Which should give you a result like:
