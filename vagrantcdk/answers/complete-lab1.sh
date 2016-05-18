@@ -1,5 +1,6 @@
 #!/bin/bash
 #execute the functionality in lab1 that other labs depend on 
+set -eux
 
 cd ~/labs/lab1
 

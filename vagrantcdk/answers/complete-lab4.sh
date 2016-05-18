@@ -1,6 +1,6 @@
 #!/bin/bash
 # execute the functionality in lab4 that other labs depend on 
-set -ex
+set -eux
 
 # Start openshift since we haven't started it already
 sudo systemctl start openshift

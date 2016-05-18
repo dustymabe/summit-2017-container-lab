@@ -1,5 +1,6 @@
 #!/bin/bash
-#execute the functionality in lab2 that other labs depend on 
+#execute the functionality in lab3 that other labs depend on 
+set -eux
 
 cd ~/labs/lab3
 
