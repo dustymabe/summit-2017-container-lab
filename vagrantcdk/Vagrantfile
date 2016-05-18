@@ -32,12 +32,19 @@ Vagrant.configure(2) do |config|
 
   # Add dev.example.com to /etc/hosts
   config.vm.provision "shell",
-    privileged: true,
     inline: "grep dev.example.com /etc/hosts || echo '127.0.0.1 dev.example.com' >> /etc/hosts"
   # Add deploy.example.com to /etc/hosts
   config.vm.provision "shell",
-    privileged: true,
     inline: "grep deploy.example.com /etc/hosts || echo '10.1.2.3 deploy.example.com' >> /etc/hosts"
+  # Add registry.access.redhat.com to /etc/hosts
+  config.vm.provision "shell",
+    inline: "grep registry.access.redhat.com /etc/hosts || echo '10.1.2.4 registry.access.redhat.com' >> /etc/hosts"
+
+  # Add registry.access.redhat.com to insecure registry
+  config.vm.provision "shell", inline: <<-SHELL
+    sed -i -e "s/# INSECURE_REGISTRY='--insecure-registry'/INSECURE_REGISTRY='--insecure-registry registry.access.redhat.com'/g" /etc/sysconfig/docker
+    systemctl restart docker
+  SHELL
 
   # Add yum repo
   config.vm.provision "file",
