@@ -79,23 +79,9 @@ VMs, but a whole lot faster. Let's take a look at the site now.
 web browser -> http://dev.example.com OR curl -L http://dev.example.com
 ```
 
-Hmmm. Well, that is disappointing. Unfortunately, because most applications 
-are designed to be deployed on "perfect environments" WordPress doesn't tolerate
-the destruction of its database without a restart of httpd (there may be plugins 
-or the like to solve this problem, but that is beyond the scope of this lab).
-
-Well, let's go ahead and restart the web server, and we will be right back to
-where we were. 
-
-```bash
-docker stop wordpress
-web browser -> http://dev.example.com OR curl -L http://dev.example.com #should fail, 404
-docker start wordpress
-web browser -> http://dev.example.com OR curl -L http://dev.example.com #site should load
-```
-
-**Note** if your page load doesn't work immediately, give wordpress another 
-second or two to come up
+And.. Your site is back! Fortunately wordpress seems to be designed
+such that it does not need a restart if its database goes away
+temporarily.
 
 Finally, let's kill off these containers to prepare for the next
 section.
