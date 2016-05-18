@@ -272,20 +272,4 @@ Confirm the registry is running.
 
 ```docker ps```
 
-In the next lab we will be pushing our work to this registry. Before we can do so 
-we need to configure the docker client to connect to the registry insecurely since 
-we do not have a CA-signed certificate.
-
-Edit `/etc/sysconfig/docker`
-
-```sudo vi /etc/sysconfig/docker```
-
-Find the line in the file that has INSECURE_REGISTRY and make the following change.
-We are telling Docker that it is safe to use this registry.
-
-```INSECURE_REGISTRY='--insecure-registry dev.example.com:5000'```
-
-Save, exit and restart docker daemon
-
-```sudo systemctl restart docker```
-
+In the next lab we will be pushing our work to this registry.
