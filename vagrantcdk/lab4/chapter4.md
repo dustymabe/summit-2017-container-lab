@@ -102,13 +102,13 @@ with docker first without having Openshift running. Let's start
 Openshift now.
 
 ```bash
-systemctl start openshift
+sudo systemctl start openshift
 ```
 
 To check if openshift is running run:
 
 ```bash
-systemctl status openshift
+sudo systemctl status openshift
 docker ps | grep openshift
 ```
 
@@ -124,7 +124,7 @@ Using project "sample-project".
 
 You are now logged in to openshift and are using the ```sample-project``` 
 project. You can also view the openshift web console by using the same 
-credentials to log in to ```https://dev.example.com:8443``` using firefox.
+credentials to log in to ```https://10.1.2.2:8443``` using firefox.
 
 ## Pod Creation
 
@@ -142,7 +142,7 @@ they should be a pod.
 Let's make a pod for mariadb. Open a file called mariadb-pod.yaml.
 
 ```bash
-mkdir -p ~/workspace/mariadb/kubernetes
+mkdir -p ~/workspace/mariadb/openshift
 vi ~/workspace/mariadb/openshift/mariadb-pod.yaml
 ```
 
@@ -284,7 +284,7 @@ If you have any issues with the pods transistioning from a "Pending"
 state, you can check out the logs from the openshift service.
 
 ```bash
-journalctl -fl -u openshift
+sudo journalctl -fl -u openshift
 ```
 
 Ok, now let's kill them off so we can introduce the services that will
@@ -394,20 +394,17 @@ oc get services
 Eventually, you should see:
 
 ```bash
-# oc get pods
-POD         IP           CONTAINER(S)   IMAGE(S)                         HOST                  LABELS            STATUS    CREATED
-mariadb     172.17.0.1   mariadb        dev.example.com:5000/mariadb     127.0.0.1/127.0.0.1   name=mariadb      Running   2 hours
-wordpress   172.17.0.2   wordpress      dev.example.com:5000/wordpress   127.0.0.1/127.0.0.1   name=wpfrontend   Running   2 hours
+$ oc get pods
+NAME        READY     STATUS    RESTARTS   AGE
+mariadb     1/1       Running   0          45s
+wordpress   1/1       Running   0          42s
 ```
 
 ```bash
-# oc get services
-NAME            LABELS                                    SELECTOR          IP               PORT(S)
-kubernetes      component=apiserver,provider=kubernetes   <none>            10.254.0.2       443/TCP
-kubernetes-ro   component=apiserver,provider=kubernetes   <none>            10.254.0.1       80/TCP
-mariadb         name=mariadb                              name=mariadb      10.254.200.116   3306/TCP
-wpfrontend      name=wpfrontend                           name=wpfrontend   10.254.177.85    80/TCP
-                                                                            192.168.135.2
+$ oc get services
+NAME        CLUSTER_IP      EXTERNAL_IP   PORT(S)    SELECTOR         AGE
+mariadb     172.30.25.181   <none>        3306/TCP   name=mariadb     1m
+wordpress   172.30.206.74   <none>        80/TCP     name=wordpress   1m
 ```
 
 Now let's expose the wordpress service by creating a route
@@ -482,6 +479,9 @@ Now we should see similar results as our local machine from:
 oc get pods
 oc get services
 ```
+
+
+XXXXXXX End lab here - below steps are broken for now.
 
 Now we can check to make sure the site is running. However, first we
 need a URL for the service.
