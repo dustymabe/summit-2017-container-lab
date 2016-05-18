@@ -7,16 +7,22 @@ sudo systemctl start openshift
 
 mkdir -p ~/workspace
 cp -R ~/labs/lab4/* ~/workspace/
-cd ~/workspace
 
+## Local
 # Login to openshift - creates .kubeconfig file 
-oc login <<EOF
-openshift-dev
-devel
-EOF
+oc login -u openshift-dev -p devel
 
-oc create -f ./mariadb/kubernetes/mariadb-pod.yaml
-oc create -f ./mariadb/kubernetes/mariadb-service.yaml 
-oc create -f ./wordpress/kubernetes/wordpress-pod.yaml 
-oc create -f ./wordpress/kubernetes/wordpress-service.yaml 
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-service.yaml
+oc expose svc/wordpress
 
+## REMOTE
+oc login --insecure-skip-tls-verify=true -u openshift-dev -p devel https://deploy.example.com:8443
+oc new-project production
+oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
+oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-pod.yaml
+oc create -f ~/workspace/wordpress/openshift/wordpress-service.yaml
+oc expose svc/wordpress

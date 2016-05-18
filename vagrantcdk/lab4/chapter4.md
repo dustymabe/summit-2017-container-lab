@@ -122,15 +122,15 @@ systemctl start openshift
 To check if openshift is running run:
 
 ```bash
-# systemctl status openshift
-# docker ps | grep openshift
+systemctl status openshift
+docker ps | grep openshift
 ```
 
 Now log in to openshift with username ```openshift-dev``` and password
-```devel```:
+ ```devel``` :
 
 ```bash
-$ oc login -u openshift-dev -p devel https://deploy.example.com/
+$ oc login -u openshift-dev -p devel
 Login successful.
 
 Using project "sample-project".
@@ -292,10 +292,10 @@ oc get pods
 ```
 
 Which should output two pods, one called ```mariadb``` and one called 
-```wordpress```.
+```wordpress``` .
 
 If you have any issues with the pods transistioning from a "Pending"
-state, you can check out the logs for each service.
+state, you can check out the logs from the openshift service.
 
 ```bash
 journalctl -fl -u openshift
@@ -424,10 +424,27 @@ wpfrontend      name=wpfrontend                           name=wpfrontend   10.2
                                                                             192.168.135.2
 ```
 
-Check and make sure you can access the wordpress frontend service that we created.
+Now let's expose the wordpress service by creating a route
 
-curl -L http://dev.example.com
+```bash
+oc expose svc/wordpress
+```
 
+And you should be able to see the service's accessible URL by viewing the routes:
+
+```bash
+$ oc get routes
+NAME        HOST/PORT                                           PATH      SERVICE     LABELS           INSECURE POLICY   TLS TERMINATION
+wordpress   wordpress-sample-project.rhel-cdk.10.1.2.2.xip.io             wordpress   name=wordpress
+```
+
+Check and make sure you can access the wordpress service through the route:
+
+```bash
+curl -L http://wordpress-sample-project.rhel-cdk.10.1.2.2.xip.io
+or
+point your browser to the URL to view the GUI
+```
 
 Seemed awfully manual and ordered up there, didn't it? Just wait til Lab5 where 
 we make it a lot less painful!
@@ -442,7 +459,7 @@ First, let's log in to the remote cluster:
 
 ```bash
 oc login --insecure-skip-tls-verify=true \
-    -u openshift-dev -p devel https://deploy.example.com/
+    -u openshift-dev -p devel https://deploy.example.com:8443
 ```
 
 This will create a new configuration file in ~/.kube/config. This
@@ -466,36 +483,6 @@ oc get services
 Nothing there, right? Ok, so let's start the bits up on the remote deployment
 server. 
 
-                Before we do that, we need to change the ```publicIP``` address in the service
-                file so that it uses the IP address on the remote host that we are going to deploy
-                the pod onto.
-
-                Open the new service file and put the following definition in it. 
-
-                ```bash
-                vi ~/workspace/wordpress/openshift/wordpress-service.yaml
-                ```
-
-                ```
-                kind: Service
-                apiVersion: v1beta3
-                id: wpfrontend
-                metadata:
-                  labels:
-                    name: wpfrontend
-                  name: wpfrontend
-                spec:
-                  ports:
-                  - port: 80
-                    protocol: TCP
-                    targetPort: 80
-                  selector:
-                    name: wpfrontend
-                  publicIPs:
-                  - 192.168.135.3
-                containerPort: 80
-                ```
-
 ```bash
 oc create -f ~/workspace/mariadb/openshift/mariadb-pod.yaml
 oc create -f ~/workspace/mariadb/openshift/mariadb-service.yaml
@@ -510,8 +497,8 @@ oc get pods
 oc get services
 ```
 
-Now we can check to make sure the site is running. However, first we need the
-IP for it.
+Now we can check to make sure the site is running. However, first we
+need a URL for the service.
 
 ```bash
 oc get endpoints
