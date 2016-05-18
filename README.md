@@ -1,4 +1,4 @@
-# Summit Lab 2015: Containerizing Applications
+# Summit Lab 2016: Containerizing Applications
 
 1. **[LAB 1](vagrantcdk/lab1/chapter1.md)** Docker refresh
 1. **[LAB 2](vagrantcdk/lab2/chapter2.md)** Analyzing a monolithic application
