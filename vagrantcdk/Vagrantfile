@@ -39,6 +39,12 @@ Vagrant.configure(2) do |config|
     privileged: true,
     inline: "grep deploy.example.com /etc/hosts || echo '10.1.2.3 deploy.example.com' >> /etc/hosts"
 
+  # Add yum repo
+  config.vm.provision "file",
+    source: "./custom.repo",
+    destination: "/tmp/custom.repo"
+  config.vm.provision "shell", inline: "mv /tmp/custom.repo /etc/yum.repos.d/custom.repo"
+
   config.vm.provider "virtualbox" do |v, override|
     v.memory = VM_MEMORY
     v.cpus   = VM_CPU
@@ -54,10 +60,8 @@ Vagrant.configure(2) do |config|
 
   config.vm.network "private_network", ip: "#{PUBLIC_ADDRESS}"
 
-  if ENV.has_key?('SUB_USERNAME') && ENV.has_key?('SUB_PASSWORD')
-    config.registration.username = ENV['SUB_USERNAME']
-    config.registration.password = ENV['SUB_PASSWORD']
-  end
+  # Skip vagrant registration because we are using offline repos
+  config.registration.skip = true
 
   config.servicemanager.services = "docker"
 end

@@ -1,20 +1,23 @@
-#   [rhel-x86_64-server-7]
-#   baseurl = http://content.example.com/packages/rhel-x86_64-server-7/
-#   sslverify = 0
-#   name = Server
-#   enabled = 1
-#   gpgcheck = 0
+[rhel-7-server-rpms]
+baseurl = http://10.1.2.4:8000/rhel-7-server-rpms
+#baseurl = http://registry.access.redhat.com:8000/rhel-7-server-rpms
+sslverify = 0
+name = RHEL 7.2 DVD RPMs
+enabled = 1
+gpgcheck = 0
 
-#   [rhel-x86_64-server-extras-7]
-#   baseurl = http://content.example.com/packages/rhel-x86_64-server-extras-7/
-#   sslverify = 0
-#   name = Extras
-#   enabled = 1
-#   gpgcheck = 0
+[rhel-7-server-updates-rpms]
+baseurl = http://10.1.2.4:8000/rhel-7-server-updates-rpms
+#baseurl = http://registry.access.redhat.com:8000/rhel-7-server-updates-rpms
+sslverify = 0
+name = RHEL 7.2 Updated RPMs
+enabled = 1
+gpgcheck = 0
 
-#   [rhel-x86_64-server-optional-7]
-#   baseurl = http://content.example.com/packages/rhel-x86_64-server-optional-7/
-#   sslverify = 0
-#   name = Optional
-#   enabled = 1
-#   gpgcheck = 0
+[rhel-7-server-extras-rpms]
+baseurl = http://10.1.2.4:8000/rhel-7-server-extras-rpms
+#baseurl = http://registry.access.redhat.com:8000/rhel-7-server-extras-rpms
+sslverify = 0
+name = A subset of RHEL 7.2 Server Extras
+enabled = 1
+gpgcheck = 0
