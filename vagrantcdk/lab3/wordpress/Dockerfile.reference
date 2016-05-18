@@ -18,5 +18,3 @@ RUN chown -R apache:apache /var/www/
 EXPOSE 80
 VOLUME /var/www/html/wp-content/uploads
 CMD ["/bin/bash", "/scripts/start.sh"]
-
-LABEL RUN docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/uploads -p 80:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE

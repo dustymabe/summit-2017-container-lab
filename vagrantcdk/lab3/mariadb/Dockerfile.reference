@@ -15,5 +15,3 @@ RUN chmod 755 /scripts/*
 EXPOSE 3306
 VOLUME /var/lib/mysql
 CMD ["/bin/bash", "/scripts/start.sh"]
-
-LABEL RUN docker run -d -v /var/lib/mysql:/var/lib/mysql  --name NAME -e DBUSER=${DBUSER} -e DBPASS={$DBPASS} -e DBNAME=${DBNAME} -e NAME=NAME -e IMAGE=IMAGE IMAGE
