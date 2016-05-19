@@ -1,0 +1,57 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+PUBLIC_ADDRESS="10.1.2.3"
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "rhelah"
+  config.registration.skip = true
+
+  # disable default sync for now
+  config.vm.synced_folder "./", "/vagrant", disabled: true
+
+  config.vm.provider "libvirt" do |v, override|
+    v.memory = 2048
+    v.cpus = 2
+  end
+  config.vm.network "private_network", ip: "#{PUBLIC_ADDRESS}"
+
+  # Add entries to /etc/hosts and configure them as insecure registries
+  config.vm.provision "shell", inline: <<-'SHELL'
+    echo '10.1.2.4 registry.access.redhat.com' >> /etc/hosts
+    echo '10.1.2.2 dev.example.com' >> /etc/hosts
+    echo -e 'INSECURE_REGISTRY=" --insecure-registry dev.example.com:5000 --insecure-registry registry.access.redhat.com"' >> /etc/sysconfig/docker
+    systemctl restart docker
+  SHELL
+
+  # Copy the oc and oadm binaries to the host
+  config.vm.provision "shell", inline: <<-'SHELL'
+    docker run --rm --entrypoint /bin/bash registry.access.redhat.com/openshift3/ose:v3.1.1.6 -c "cat /usr/bin/oc" > /usr/local/bin/oc
+    docker run --rm --entrypoint /bin/bash registry.access.redhat.com/openshift3/ose:v3.1.1.6 -c "cat /usr/bin/oadm" > /usr/local/bin/oadm
+    chmod +x /usr/local/bin/oc
+    chmod +x /usr/local/bin/oadm
+    hostnamectl set-hostname deploy.example.com
+  SHELL
+
+  # Add the systemd unit file for openshift to the box
+  config.vm.provision "file",
+    source: "./openshift.service",
+    destination: "/tmp/openshift.service"
+
+  # Start openshift
+  config.vm.provision "shell", inline: <<-SHELL
+    mv /tmp/openshift.service /etc/systemd/system/openshift.service
+  SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    systemctl daemon-reload
+    systemctl enable openshift
+    systemctl start openshift
+  SHELL
+
+  # Allow containers in openshift to run as root
+  config.vm.provision "shell", inline: <<-SHELL
+    sleep 15
+    /usr/local/bin/oadm policy add-scc-to-group anyuid system:authenticated  --config=/var/lib/openshift/openshift.local.config/master/admin.kubeconfig
+  SHELL
+end

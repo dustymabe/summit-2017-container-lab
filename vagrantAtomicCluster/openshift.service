@@ -1,0 +1,20 @@
+[Unit]
+Description=Docker Application Container for OpenShift
+Documentation=https://docs.openshift.org/
+After=docker.service
+Requires=docker.service
+Conflicts=etcd.service kube-apiserver.service kube-controller-manager.service kube-scheduler.service kube-proxy.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+EnvironmentFile=-/etc/sysconfig/openshift_option
+ExecStartPre=-/usr/bin/docker stop openshift
+ExecStartPre=-/usr/bin/docker rm openshift
+ExecStart=/usr/bin/docker run --name openshift --privileged --net=host --pid=host -w /var/lib/openshift -e KUBECONFIG=/var/lib/openshift/openshif.local.config/master/admin.kubeconfig -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker:/var/lib/docker:rw -v /var/lib/openshift/openshift.local.volumes:/var/lib/openshift/openshift.local.volumes:z -v /var/lib/openshift/openshift.local.config:/var/lib/openshift/openshift.local.config:z -v /var/lib/openshift/openshift.local.etcd:/var/lib/openshift/openshift.local.etcd:z registry.access.redhat.com/openshift3/ose:v3.1.1.6 start
+KillMode=process
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=multi-user.target
