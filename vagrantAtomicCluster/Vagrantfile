@@ -6,6 +6,7 @@ PUBLIC_ADDRESS="10.1.2.3"
 Vagrant.configure(2) do |config|
 
   config.vm.box = "rhelah"
+  config.vm.hostname = "deploy.example.com"
   config.registration.skip = true
 
   # disable default sync for now
@@ -51,7 +52,9 @@ Vagrant.configure(2) do |config|
 
   # Allow containers in openshift to run as root
   config.vm.provision "shell", inline: <<-SHELL
-    sleep 15
-    /usr/local/bin/oadm policy add-scc-to-group anyuid system:authenticated  --config=/var/lib/openshift/openshift.local.config/master/admin.kubeconfig
+    sleep 10
+    while ! /usr/local/bin/oadm policy add-scc-to-group anyuid system:authenticated  --config=/var/lib/openshift/openshift.local.config/master/admin.kubeconfig; do
+        sleep 10
+    done
   SHELL
 end
