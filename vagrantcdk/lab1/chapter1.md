@@ -8,7 +8,7 @@ itself as well as walk through some exercises with a couple of Docker images
 / containers to tell a complete story and point out some things that you might 
 have to consider when containerizing your application.
 
-This lab should be performed on dev.example.com unless otherwise instructed.
+This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
 Username: root; Password: redhat
 

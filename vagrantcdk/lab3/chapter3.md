@@ -4,7 +4,7 @@ In this lab you will deconstruct an application into microservices, creating
 a multi-container application. In this process we explore the challenges of 
 networking, storage and configuration.
 
-This lab should be performed on dev.example.com unless otherwise instructed.
+This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
 Username: root; Password: redhat
 
@@ -266,14 +266,14 @@ to copy+paste from README files.
    The tag is what Docker uses to identify the particular image that we want to upload to
    a registry.
 
-        docker tag mariadb dev.example.com:5000/mariadb
-        docker tag wordpress dev.example.com:5000/wordpress
+        docker tag mariadb rhel-cdk.example.com:5000/mariadb
+        docker tag wordpress rhel-cdk.example.com:5000/wordpress
         docker images
 
 1. Push the images
 
-        docker push dev.example.com:5000/mariadb
-        docker push dev.example.com:5000/wordpress
+        docker push rhel-cdk.example.com:5000/mariadb
+        docker push rhel-cdk.example.com:5000/wordpress
 
 ## Clean Up
 

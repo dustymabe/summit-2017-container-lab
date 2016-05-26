@@ -11,7 +11,7 @@ of multiple services. We will also observe several bad practices when
 composing Dockerfiles and explore how to avoid those mistakes. In lab 3
 we will decompose the application into more manageable pieces.
 
-This lab should be performed on dev.example.com unless otherwise instructed.
+This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
 Username: root; Password: redhat
 
@@ -110,10 +110,10 @@ port 80:
 docker port bigapp 80
 ```
 
-Now connect to the port via the web browser on your machine using ```http://dev.example.com:<port>```.  You can also use curl to connect, for example:
+Now connect to the port via the web browser on your machine using ```http://rhel-cdk.example.com:<port>```.  You can also use curl to connect, for example:
 
 ```bash
-curl -L http://dev.example.com:<port>
+curl -L http://rhel-cdk.example.com:<port>
 ```
 
 ## Review Dockerfile practices
