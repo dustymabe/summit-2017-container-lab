@@ -57,13 +57,8 @@ sudo systemctl status docker
 Now that we see how the Docker startup process works, we should make sure we 
 know how to get help when we need it.  Run the following commands to get familiar 
 with what is included in the Docker package as well as what is provided in the man 
-pages. Spend some time exploring here, it's helpful. When you run `docker info` 
-check out the storage configuration. You will notice that by default it is using 
-*device mapper loopback*. This can and should be changed to *device mapper direct LVM*. 
-Performance and stability will be improved. See the storage section on the 
-[RHEL Atomic Getting Started Guide.](https://access.redhat.com/articles/rhel-atomic-getting-started#storage)
-
-XXX FLAG - we aren't using the device mapper loopback in the cdk
+pages. Spend some time exploring here, it is helpful. When you run `docker info` 
+check out the storage configuration.  
 
 Check out the executables provided:
 
