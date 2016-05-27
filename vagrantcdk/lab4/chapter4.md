@@ -3,7 +3,7 @@
 In this lab we introduce how to orchestrate a multi-container application in 
 Openshift.
 
-This lab should be performed on dev.example.com unless otherwise instructed.
+This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
 Username: root; Password: redhat
 
@@ -21,7 +21,7 @@ docker run -d -p 80:80 --link mariadb:db --name wordpress wordpress
 ```
 
 Take a look at the site in your web browser on your machine using 
-[http://dev.example.com](http://dev.example.com). As you learned 
+[http://rhel-cdk.example.com](http://rhel-cdk.example.com). As you learned 
 before, you can confirm the port that your server is running on by
 running:
 
@@ -39,7 +39,7 @@ ip addr
 ```
 
 However, we have some nice DNS set up and chose port 80, so you 
-can just use [http://dev.example.com](http://dev.example.com).
+can just use [http://rhel-cdk.example.com](http://rhel-cdk.example.com).
 
 Now, let's see what happens when we kick over the database. However,
 for a later experiment, let's grab the container-id right before you do it. 
@@ -54,7 +54,7 @@ imagine, explosions! *making sound effects will be much appreciated
 by your lab mates.*
 
 ```bash
-web browser -> http://dev.example.com OR curl -L http://dev.example.com
+web browser -> http://rhel-cdk.example.com OR curl -L http://rhel-cdk.example.com
 ```
 
 Now, what is neat about a container system, assuming your web application
@@ -76,7 +76,7 @@ about what you would expect for a web server and a database running on
 VMs, but a whole lot faster. Let's take a look at the site now.
 
 ```bash
-web browser -> http://dev.example.com OR curl -L http://dev.example.com
+web browser -> http://rhel-cdk.example.com OR curl -L http://rhel-cdk.example.com
 ```
 
 And.. Your site is back! Fortunately wordpress seems to be designed
@@ -173,7 +173,7 @@ To start, we will add the most basic information. Please replace the
 ```
   containers:
     - name: mariadb
-      image: dev.example.com:5000/mariadb
+      image: rhel-cdk.example.com:5000/mariadb
       ports:
         - containerPort: 3306
       env:
@@ -208,7 +208,7 @@ metadata:
 spec:
   containers:
     - name: mariadb
-      image: dev.example.com:5000/mariadb
+      image: rhel-cdk.example.com:5000/mariadb
       ports:
         - containerPort: 3306
       env:
@@ -237,7 +237,7 @@ metadata:
 spec:
   containers:
   - name: wordpress
-    image: dev.example.com:5000/wordpress
+    image: rhel-cdk.example.com:5000/wordpress
     ports:
       - containerPort: 80
     env:

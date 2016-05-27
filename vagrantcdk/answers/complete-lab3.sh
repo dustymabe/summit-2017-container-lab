@@ -18,7 +18,7 @@ docker build -t wordpress -f wordpress/Dockerfile.reference wordpress/.
 docker build -t mariadb -f mariadb/Dockerfile.reference mariadb/.
 docker build -t wordpress -f wordpress/Dockerfile.reference wordpress/.
 
-TARGET_IP='dev.example.com'
+TARGET_IP='rhel-cdk.example.com'
 
 docker tag -f mariadb $TARGET_IP:5000/mariadb
 docker tag -f wordpress $TARGET_IP:5000/wordpress
