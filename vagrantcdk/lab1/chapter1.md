@@ -1,6 +1,6 @@
 # LAB 1: Docker refresh
 
-In this lab we will explore the docker environment. If you are familiar with 
+In this lab we will explore the docker environment within the CDK. If you are familiar with 
 docker this may function as a brief refresher. If you are new to docker this 
 will serve as an introduction to docker basics. Don't worry, we will progress
 rapidly. To get through this lab, we are going to focus on the environment 
@@ -10,7 +10,11 @@ have to consider when containerizing your application.
 
 This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
-Username: root; Password: redhat
+Use Vagrant to bring up and ssh into the machine:
+
+cd ~/summit-2016-container-lab/vagrantcdk
+vagrant up
+vagrant ssh
 
 Expected completion: 15-20 minutes
 
@@ -27,10 +31,10 @@ Agenda:
 
 ##Docker and systemd
 
-Check out the systemd unit file that starts Docker on our host and notice that 
+Check out the systemd unit file that starts Docker on the CDK and notice that 
 it includes 3 EnvironmentFiles. These files tell Docker how the Docker daemon, 
 storage and networking should be set up and configured. Take a look at those 
-files too. Specifically, in the /etc/sysconfig/docker check out the registry 
+files too. Specifically, in the /etc/sysconfig/docker file check out the registry 
 settings. You may find it interesting that you can `ADD_REGISTRY` and 
 `BLOCK_REGISTRY`. Think about the different use cases for that.
 
@@ -39,16 +43,15 @@ Perform the following commands as root unless instructed otherwise.
 ```bash
 cat /usr/lib/systemd/system/docker.service
 cat /usr/lib/systemd/system/docker-storage-setup.service
-cat /usr/lib/systemd/system/docker-registry.service
 cat /etc/sysconfig/docker
 cat /etc/sysconfig/docker-storage
 cat /etc/sysconfig/docker-network
 ```
 
 * Now check the status of docker and make sure it is running before moving forward.
+  It should have been brought up automatically for us by the CDK.
 
 ```bash
-sudo systemctl start docker
 sudo systemctl status docker
 ```
 
@@ -58,7 +61,10 @@ Now that we see how the Docker startup process works, we should make sure we
 know how to get help when we need it.  Run the following commands to get familiar 
 with what is included in the Docker package as well as what is provided in the man 
 pages. Spend some time exploring here, it is helpful. When you run `docker info` 
-check out the storage configuration.  
+check out the storage configuration. The CDK automatically sets up storage 
+for us by creating an LVM thin pool for use as a device mapper direct docker 
+storage backend.
+
 
 Check out the executables provided:
 
@@ -82,7 +88,9 @@ docker info
 ```
 
 Take a look at the Docker images on the system. These images have been cached
-here ahead of time. You should see some Openshift images.
+here ahead of time. You should see some Openshift images too, which are cached 
+in the CDK so you can start OpenShift without having to wait for the
+container images to download.
   
 ```bash
 docker images
@@ -95,7 +103,7 @@ to have a look at some of the basic commands that are used to construct a Docker
 image. For this lab, we will explore a basic Apache Dockerfile and then confirm 
 functionality.
 
-As root, change directory to `~/labs/lab1/` and `cat` out the Dockerfile
+As the vagrant user, change directory to `~/labs/lab1/` and `cat` out the Dockerfile
 
 ```bash
 cd ~/labs/lab1
@@ -121,12 +129,18 @@ CMD ["/run-apache.sh"]
 ```
 
 Here you can see in the `FROM` command that we are pulling a RHEL 7.2 base image 
-that we are going to build on. We are also using a custom yum repo that is local 
-to this environment. We are doing this because we are in a disconnected lab environment.
-However, the way RHEL images normally get access to content is by inheriting the 
-subscriptions that are on the host they are running on. Next we update the container 
-and install `httpd`. Finally, we modify the index.html file, `EXPOSE` port 80 which 
-allows traffic into the container and start the container with a a `CMD` of `run-apache.sh`.  
+that we are going to build on. We are also adding a custom yum repo file. In disconnected 
+lab environments this file will be used to reference a local yum repository.
+In non-disconnected environments you will get access to content by
+registering the system. Registration is done for you in the CDK on bringup via
+Vagrant. Containers that are being built inherit the subscriptions of
+the host they are running on, so you only need to register the host
+system.
+
+After gaining access to a repository we update the container and install `httpd`.
+Finally, we modify the index.html file, `EXPOSE` port 80, which 
+allows traffic into the container, and then set the container to start with a 
+`CMD` of `run-apache.sh`.  
 
 
 ## Build an Image
@@ -153,7 +167,7 @@ we are mapping a port from the host to the contianer. We are being explicit here
 We are telling Docker to map port 80 on the host to port 80 in the container. 
 Now, we could have let Docker handle the host side port mapping dynamically by 
 passing a `-p 80`, in which case Docker would have randomly assigned a port to 
-the container. Finally we passed in the name of the image that we built earlier.
+the container. Finally, we passed in the name of the image that we built earlier.
 
 
 Okay, let's make sure we can access the web server.

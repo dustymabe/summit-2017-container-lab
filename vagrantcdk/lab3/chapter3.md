@@ -6,8 +6,6 @@ networking, storage and configuration.
 
 This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
-Username: root; Password: redhat
-
 Expected completion: 20-30 minutes
 
 ## Decompose the application
@@ -51,8 +49,12 @@ The Wordpress tar file was extracted into `/var/www/html`. List the files.
 ls -l /var/www/html
 ```
 
-If these files change and the container dies the changes will be lost.
-These files should be mounted to persistent storage on the host.
+These are sensitive files for our application and it would be
+unfortunate if changes to these files were lost. Currently the running
+container does not have any associated "volumes", which means that if
+this container dies all changes will be lost. This mount point in the
+container should be backed by a "volume". Later in this lab we'll use
+a host directory backed "volume" to make sure these files persist.
 
 #### Database
 
@@ -62,10 +64,11 @@ Inspect the `mariadb.log` file to discover the database directory.
 grep databases /var/log/mariadb/mariadb.log
 ```
 
-The `/var/lib/mysql` should also be mounted to persistent storage
+Again, we have found some files that are in need of some non-volatile
+storage. The `/var/lib/mysql` should also be mounted to persistent storage
 on the host.
 
-Once we've inspected the container stop and remove it. `docker ps -ql`
+Now that we've inspected the container stop and remove it. `docker ps -ql`
 prints the ID of the latest created container.  First you will need to
 exit the container.
 
@@ -121,7 +124,8 @@ ls -lR wordpress
 
         EXPOSE 3306
 
-1. Add a `VOLUME` instruction for `/var/lib/mysql`.
+1. Add a `VOLUME` instruction for `/var/lib/mysql`. This ensures data
+   will be persisted even if the container is lost.
 
         VOLUME /var/lib/mysql
 
@@ -169,7 +173,8 @@ Now we'll create the Wordpress Dockerfile.
 
         EXPOSE 80
 
-1. Add a `VOLUME` instruction for Wordpress uploads.
+1. Add a `VOLUME` instruction for Wordpress uploads. This ensures data
+   will be persisted even if the container is lost.
 
         VOLUME /var/www/html/wp-content/uploads
 

@@ -13,8 +13,6 @@ we will decompose the application into more manageable pieces.
 
 This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
 
-Username: root; Password: redhat
-
 Expected completion: 20-25 minutes
 
 Agenda:
@@ -51,6 +49,10 @@ cd ~/labs/lab2/bigapp/
 docker build -t bigimg .
 ```
 
+This can take a while to build. While you wait you may want to peek at
+the [Review Dockerfile Practices](#review-dockerfile-practices) section 
+at the end of this lab chapter.
+
 ## Run Container Based on Docker Image
 
 To run the docker container based on the image we just built use the
@@ -66,7 +68,7 @@ Take a look at some of the arguments we are passing to Docker.  We are telling D
 ## Exploring the Running Container
 
 Now that the container is running we will explore the running
-container to see what's going on inside. First off the processes were
+container to see what's going on inside. First off, the processes were
 started and any output that goes to stdout will come to the console of
 the container. You can run `docker logs` to see the output. To follow or "tail" the logs use the `-f` option.
 

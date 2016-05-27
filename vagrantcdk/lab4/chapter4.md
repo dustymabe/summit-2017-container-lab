@@ -1,11 +1,9 @@
 # LAB 4: Orchestrated deployment of a decomposed application
 
 In this lab we introduce how to orchestrate a multi-container application in 
-Openshift.
+OpenShift.
 
 This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
-
-Username: root; Password: redhat
 
 Expected completion: 40-60 minutes
 
@@ -23,7 +21,7 @@ docker run -d -p 80:80 --link mariadb:db --name wordpress wordpress
 Take a look at the site in your web browser on your machine using 
 [http://rhel-cdk.example.com](http://rhel-cdk.example.com). As you learned 
 before, you can confirm the port that your server is running on by
-running:
+executing:
 
 ```bash
 docker ps
@@ -35,7 +33,7 @@ can also get your ip address by looking at the address for the
 eth0 interface after you execute:
 
 ```bash
-ip addr
+ip addr show dev eth1
 ```
 
 However, we have some nice DNS set up and chose port 80, so you 
@@ -92,27 +90,27 @@ docker rm -f wordpress mariadb
 
 Starting and stopping is definitely easy, and fast. However, it is still pretty manual.
 What if we could automate the recovery? Or, in buzzword terms, "ensure the service 
-remains up"? Enter Kubernetes/Openshift.
+remains up"? Enter Kubernetes/OpenShift.
 
-## Starting Openshift on the CDK
+## Starting OpenShift on the CDK
 
 The Vagrantfile we used to bring up the CDK in lab1 does not start
 OpenShift by default. We chose to do this so that we could play around
-with docker first without having Openshift running. Let's start
-Openshift now.
+with docker first without having OpenShift running. Let's start
+OpenShift now.
 
 ```bash
 sudo systemctl start openshift
 ```
 
-To check if openshift is running run:
+To check if OpenShift is running execute:
 
 ```bash
 sudo systemctl status openshift
-docker ps | grep openshift
+docker ps --filter name=openshift
 ```
 
-Now log in to openshift with username ```openshift-dev``` and password
+Now log in to OpenShift with username ```openshift-dev``` and password
  ```devel``` :
 
 ```bash
@@ -122,8 +120,8 @@ Login successful.
 Using project "sample-project".
 ```
 
-You are now logged in to openshift and are using the ```sample-project``` 
-project. You can also view the openshift web console by using the same 
+You are now logged in to OpenShift and are using the ```sample-project``` 
+project. You can also view the OpenShift web console by using the same 
 credentials to log in to ```https://10.1.2.2:8443``` using firefox.
 
 ## Pod Creation
@@ -253,12 +251,11 @@ A couple things to notice about this file. Obviously, we change all the
 appropriate names to reflect "wordpress" but, largely, it is the same as
 the mariadb pod file. We also use the environment variables that are specified
 by the wordpress container, although they need to get the same values as the
-ones in the mariadb pod. Lastly, just to show you aren't bound to the image or
-pod names, we also changed the ```labels``` value to "wpfronted".
+ones in the mariadb pod.
 
 Ok, so, lets launch our pods and make sure they come up correctly. In
 order to do this, we need to introduce the ```oc``` command which is
-what drives openshift. Generally, speaking, the format of ```oc```
+what drives OpenShift. Generally, speaking, the format of ```oc```
 commands is ```kubetctl <operation> <kind>```. Where ```<operation>``` is
 something like ```create```, ```get```, ```remove```, etc. and ```kind```
 is the ```kind``` from the pod files.
@@ -278,10 +275,11 @@ oc get pods
 ```
 
 Which should output two pods, one called ```mariadb``` and one called 
-```wordpress``` .
+```wordpress``` . You can also check the OpenShift web console if you
+already have it pulled up and verify the pods show up there as well.
 
 If you have any issues with the pods transistioning from a "Pending"
-state, you can check out the logs from the openshift service.
+state, you can check out the logs from the OpenShift service.
 
 ```bash
 sudo journalctl -fl -u openshift
@@ -301,7 +299,7 @@ oc delete pod wordpress
          information you want.
 
 ## Service Creation
-Now we want to create Kubernetes Services for our pods so that Openshift 
+Now we want to create Kubernetes Services for our pods so that OpenShift 
 can introduce a layer of indirection between the pods. 
 
 Let's start with mariadb. Open up a service file:
@@ -353,12 +351,13 @@ spec:
     name: wordpress
 ```
 
-So, here you may notice, there is no reference to wordpress at all. In fact,
-we might even want to name the file wordpress-service.yaml to make it clearer
-that, in fact, we could have any pod that provides "wordpress capabilities".
-However, for a lab like this, I thought it would be confusing. 
+Here you may notice there is no reference to the wordpress pod at all.
+Any pod that provides "wordpress capabilities" can be targeted by this
+service. Pods can claim to provide "wordpress capabilities" through their
+labels. This service is programmed to target pods with a label of  
+```name: wordpress```. 
 
-An even better example might have been if we had made the mariadb-service just
+Another example of this might have been if we had made the mariadb-service just
 a "db" service and then, the pod could be mariadb, mysql, sqlite, anything really,
 that can support SQL the way wordpress expects it to. In order to do that, we
 would just have to add a ```label``` to the ```mariadb-pod.yaml``` called "db"
@@ -388,7 +387,7 @@ oc get services
 ```
 
 **Note** these may take a while to get to a ```RUNNING``` state as it pulls 
-         the image from the registry, spin up the containers, do the openshift 
+         the image from the registry, spin up the containers, do the OpenShift 
          magic, etc. 
 
 Eventually, you should see:
@@ -436,7 +435,7 @@ we make it a lot less painful!
 
 
 Now that we are satisfied that our containers and Kubernetes definitions work, 
-let's try deploying it to a "deployment" server running Atomic Host.
+let's try deploying to "production" on a "deployment" server running Atomic Host.
 
 First, let's log in to the remote cluster:
 
@@ -446,7 +445,7 @@ oc login --insecure-skip-tls-verify=true \
 ```
 
 This will create a new configuration file in ~/.kube/config. This
-file stores information about how to connect to the remote Openshift
+file stores information about how to connect to the remote OpenShift
 cluster.
 
 Let's create a new project in the remote cluster:
