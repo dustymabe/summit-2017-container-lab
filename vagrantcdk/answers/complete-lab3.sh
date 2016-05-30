@@ -4,8 +4,8 @@ set -eux
 
 cd ~/labs/lab3
 
-docker stop bigapp #a little safer then $(docker ps -ql)
-docker rm bigapp #a little safer then $(docker ps -ql)
+docker stop bigapp || true # Don't worry if it fails 
+docker rm bigapp || true
 
 sudo mkdir -p /var/lib/mariadb
 sudo mkdir -p /var/lib/wp_uploads
