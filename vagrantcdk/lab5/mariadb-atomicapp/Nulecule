@@ -1,0 +1,25 @@
+---
+specversion: 0.0.2
+
+id: mariadb-summit2016
+metadata:
+  name: MariaDB
+  appversion: v1.0.0
+  description: An enhanced, drop-in replacement for MySQL
+
+graph:
+  - name: mariadb
+    artifacts:
+      openshift:
+        - file://artifacts/openshift/mariadb-pod.yaml
+        - file://artifacts/openshift/mariadb-service.yaml
+    params:
+      - name: image
+        description: mariadb docker image
+        default: rhel-cdk.example.com:5000/mariadb
+      - name: db_user
+        description: wordpress database username
+      - name: db_pass
+        description: wordpress database password
+      - name: db_name
+        description: wordpress database name
