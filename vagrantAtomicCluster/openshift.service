@@ -11,7 +11,7 @@ Restart=always
 EnvironmentFile=-/etc/sysconfig/openshift_option
 ExecStartPre=-/usr/bin/docker stop openshift
 ExecStartPre=-/usr/bin/docker rm openshift
-ExecStart=/usr/bin/docker run --name openshift --privileged --net=host --pid=host -w /var/lib/openshift -e KUBECONFIG=/var/lib/openshift/openshif.local.config/master/admin.kubeconfig -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker:/var/lib/docker:rw -v /var/lib/openshift/openshift.local.volumes:/var/lib/openshift/openshift.local.volumes:z -v /var/lib/openshift/openshift.local.config:/var/lib/openshift/openshift.local.config:z -v /var/lib/openshift/openshift.local.etcd:/var/lib/openshift/openshift.local.etcd:z registry.access.redhat.com/openshift3/ose:v3.1.1.6 start
+ExecStart=/usr/bin/docker run --name openshift --privileged --net=host --pid=host -w /var/lib/origin -e KUBECONFIG=/var/lib/origin/openshif.local.config/master/admin.kubeconfig -v /:/rootfs:ro -v /var/run:/var/run:rw -v /sys:/sys:ro -v /var/lib/docker:/var/lib/docker:rw -v /var/lib/origin/openshift.local.volumes:/var/lib/origin/openshift.local.volumes:z -v /var/lib/origin/openshift.local.config:/var/lib/origin/openshift.local.config:z -v /var/lib/origin/openshift.local.etcd:/var/lib/origin/openshift.local.etcd:z registry.access.redhat.com/openshift3/ose:v3.1.1.6 start --master-config /var/lib/origin/openshift.local.config/master/master-config.yaml --node-config /var/lib/origin/openshift.local.config/node-deploy.example.com/node-config.yaml
 KillMode=process
 Restart=on-failure
 RestartSec=30s
