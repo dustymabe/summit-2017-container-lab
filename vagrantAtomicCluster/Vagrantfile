@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-'SHELL'
     echo '10.1.2.4 registry.access.redhat.com' >> /etc/hosts
     echo '10.1.2.2 rhel-cdk.example.com' >> /etc/hosts
-    echo -e 'INSECURE_REGISTRY=" --insecure-registry dev.example.com:5000 --insecure-registry registry.access.redhat.com"' >> /etc/sysconfig/docker
+    echo -e 'INSECURE_REGISTRY=" --insecure-registry rhel-cdk.example.com:5000 --insecure-registry registry.access.redhat.com"' >> /etc/sysconfig/docker
     systemctl restart docker
   SHELL
 
