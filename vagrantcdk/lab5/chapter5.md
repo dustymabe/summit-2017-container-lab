@@ -54,12 +54,16 @@ from the upstream Atomic App Nulecule Library.
 
 1. Change directory into the Copy the Nulecule template files to the workspace directory.
 
-        mkdir -p ~/workspace/nulecule/
-        cp -R ~/labs/lab5/* ~/workspace/nulecule/
+```
+mkdir -p ~/workspace/nulecule/
+cp -R ~/labs/lab5/* ~/workspace/nulecule/
+```
 
 1. Open the Nulecule file for the wordpress Atomic App in a text editor.
 
-        vi ~/workspace/nulecule/wordpress-atomicapp/Nulecule
+```
+vi ~/workspace/nulecule/wordpress-atomicapp/Nulecule
+```
 
 Take a look at the Nulecule file. There are two primary sections: metadata 
 and graph. The graph is a list of components to deploy, like the database 
@@ -71,49 +75,49 @@ is deployed.
 
 1. Open the Nulecule file in an editor. The file is reproduced here:
 
-    ...
-    ---
-    specversion: 0.0.2
-    id: summit-2016-wp
-    metadata:
-      name: Wordpress
-      appversion: v1.0.0
-      description: >
-        WordPress is web software you can use to create a beautiful
-        website or blog. We like to say that WordPress is both free
-        and priceless at the same time.
-    graph:
-      - name: mariadb
-    #   source: "docker://projectatomic/mariadb-centos7-atomicapp"
-    #   source: "docker://mariadb-rhel7-atomicapp"
-      - name: wordpress
-        artifacts:
-          openshift:
-            - file://artifacts/openshift/wordpress-pod.yaml
-            - file://artifacts/openshift/wordpress-service.yaml
-        params:
-          - name: image
-            description: wordpress docker image
-            default: rhel-cdk.example.com:5000/wordpress
-          - name: db_user
-            description: wordpress database username
-          - name: db_pass
-            description: wordpress database password
-          - name: db_name
-            description: wordpress database name
-    ...
+```
+---
+specversion: 0.0.2
+id: summit-2016-wp
+metadata:
+  name: Wordpress
+  appversion: v1.0.0
+  description: >
+    WordPress is web software you can use to create a beautiful
+    website or blog. We like to say that WordPress is both free
+    and priceless at the same time.
+graph:
+  - name: mariadb
+#   source: "docker://projectatomic/mariadb-centos7-atomicapp"
+#   source: "docker://mariadb-rhel7-atomicapp"
+  - name: wordpress
+    artifacts:
+      openshift:
+        - file://artifacts/openshift/wordpress-pod.yaml
+        - file://artifacts/openshift/wordpress-service.yaml
+    params:
+      - name: image
+        description: wordpress docker image
+        default: rhel-cdk.example.com:5000/wordpress
+      - name: db_user
+        description: wordpress database username
+      - name: db_pass
+        description: wordpress database password
+      - name: db_name
+        description: wordpress database name
+```
 
 
 1. Let's inspect the file. The graph specifies the different elements 
    of the Atomic App:
 
-    ...
-    graph:
-      - name: mariadb
-    #   source: "docker://projectatomic/mariadb-centos7-atomicapp"
-    #   source: "docker://mariadb-rhel7-atomicapp"
-      - name: wordpress
-    ...
+```
+graph:
+  - name: mariadb
+#   source: "docker://projectatomic/mariadb-centos7-atomicapp"
+#   source: "docker://mariadb-rhel7-atomicapp"
+  - name: wordpress
+```
 
 Above you can see there is a ```mariadb``` part of the application
 as well as a ```wordpress`` part of the application. We have elected to
@@ -130,13 +134,13 @@ and uncomment the ```docker://projectatomic/mariadb-centos7-atomicapp``` line.
 
 1. Inspect the artifacts that are to be packaged in the Nulecule:
 
-    ...
-      - name: wordpress
-        artifacts:
-          openshift:
-            - file://artifacts/openshift/wordpress-pod.yaml
-            - file://artifacts/openshift/wordpress-service.yaml
-    ...
+```
+  - name: wordpress
+    artifacts:
+      openshift:
+        - file://artifacts/openshift/wordpress-pod.yaml
+        - file://artifacts/openshift/wordpress-service.yaml
+```
 
 These are the artifacts that we be sent to the provider to create the
 application.
@@ -144,27 +148,27 @@ application.
 What are the contents of these files? Very similar to the content from 
 lab4. Let's look at the ```wordpress-pod.yaml``` for example:
 
-    ...
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: wordpress
-      labels:
-        name: wordpress
-    spec:
-      containers:
-      - name: wordpress
-        image: $image
-        ports:
-          - containerPort: 80
-        env:
-          - name: DB_ENV_DBUSER
-            value: $db_user 
-          - name: DB_ENV_DBPASS
-            value: $db_pass
-          - name: DB_ENV_DBNAME
-            value: $db_name
-    ...
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wordpress
+  labels:
+    name: wordpress
+spec:
+  containers:
+  - name: wordpress
+    image: $image
+    ports:
+      - containerPort: 80
+    env:
+      - name: DB_ENV_DBUSER
+        value: $db_user 
+      - name: DB_ENV_DBPASS
+        value: $db_pass
+      - name: DB_ENV_DBNAME
+        value: $db_name
+```
 
 
 Wait. Something is different. What are those ```$image```, ```$db_user```, 
@@ -174,18 +178,18 @@ Nulecule file. We'll check that out below.
 
 1. Inspect the parameters in the Nulecule:
 
-    ...
-        params:
-          - name: image
-            description: wordpress docker image
-            default: rhel-cdk.example.com:5000/wordpress
-          - name: db_user
-            description: wordpress database username
-          - name: db_pass
-            description: wordpress database password
-          - name: db_name
-            description: wordpress database name
-    ...
+```
+    params:
+      - name: image
+        description: wordpress docker image
+        default: rhel-cdk.example.com:5000/wordpress
+      - name: db_user
+        description: wordpress database username
+      - name: db_pass
+        description: wordpress database password
+      - name: db_name
+        description: wordpress database name
+```
 
 You'll see that these parameters correspond directly to the variables
 within the ```wordpress-pod.yaml``` file. These are values that can be
@@ -221,42 +225,52 @@ Now we'll deploy Wordpress as an Atomic app.
 1. We will run the atomic app base container image where the `Nulecule` file 
    is in `~/workspace`.
 
-        cd ~/workspace/nulecule/wordpress-atomicapp/
+```
+cd ~/workspace/nulecule/wordpress-atomicapp/
+```
 
 1. Inspect the Atomic app base container image. Notice how the `RUN` LABEL 
    mounts in the current working directory with the `-v ${PWD}:/atomicapp` option. 
    This allows for the files in the current directory to be inspected by atomicapp.
 
-        docker pull devstudio/atomicapp:0.5.0
-        sudo atomic info devstudio/atomicapp:0.5.0
+```
+docker pull devstudio/atomicapp:0.5.0
+sudo atomic info devstudio/atomicapp:0.5.0
+```
 
 1. Generate an answers file for the Atomic App
 
-        sudo -E atomic run devstudio/atomicapp:0.5.0 --mode genanswers ./
+```
+sudo -E atomic run devstudio/atomicapp:0.5.0 --mode genanswers ./
+```
 
 1. Edit the `answers.conf` file to populate variables as well as point Atomic
    App at the appropriate OpenShift instance. The contents should look
    something like this:
 
-        [mariadb]
-        image = rhel-cdk.example.com:5000/mariadb
-        db_pass = password
-        db_user = user
-        db_name = name
-        [wordpress]
-        image = rhel-cdk.example.com:5000/wordpress
-        db_pass = password
-        db_user = user
-        db_name = name
-        [general]
-        namespace = sample-project
-        provider = openshift
-        provider-config = /home/vagrant/.kube/config
+```
+[mariadb]
+image = rhel-cdk.example.com:5000/mariadb
+db_pass = password
+db_user = user
+db_name = name
+[wordpress]
+image = rhel-cdk.example.com:5000/wordpress
+db_pass = password
+db_user = user
+db_name = name
+[general]
+namespace = sample-project
+provider = openshift
+provider-config = /home/vagrant/.kube/config
+```
 
 1. Run the Atomic app. This will look at the files that we just created in the 
    current directory and bring up the application in Openshift
 
-        sudo -E atomic run devstudio/atomicapp:0.5.0 ./
+```
+sudo -E atomic run devstudio/atomicapp:0.5.0 ./
+```
 
 The MariaDB Atomic App will be downloaded. Since it is a remote source the MariaDB 
 Atomic App files are placed in directory `external`. Once complete, the wordpress 
