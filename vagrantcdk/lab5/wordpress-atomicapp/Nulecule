@@ -10,7 +10,7 @@ metadata:
     and priceless at the same time.
 graph:
   - name: mariadb
-    source: "docker://projectatomic/mariadb-centos7-atomicapp"
+#   source: "docker://projectatomic/mariadb-centos7-atomicapp"
 #   source: "docker://mariadb-rhel7-atomicapp"
   - name: wordpress
     artifacts:
