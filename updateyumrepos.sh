@@ -1,3 +1,9 @@
+#!/bin/bash
+
+# This script will update all of the custom.repo yum repo files that
+# are scattered throughout the repository. We could have used a
+# symlink to a single file but building in Docker caused problems with
+# that approach.
 
 repofile=$(cat <<EOF
 [rhel-7-server-rpms]
