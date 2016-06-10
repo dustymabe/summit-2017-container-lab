@@ -46,17 +46,6 @@ Vagrant.configure(2) do |config|
     systemctl restart docker
   SHELL
 
-# config.vm.provision "shell", inline: <<-'SHELL'
-#   cat > /etc/dnsmasq.d/lab <<EOF
-#   address=/rhel-cdk.example.com/10.1.2.2
-#   address=/deploy.example.com/10.1.2.3
-#   address=/registry.access.redhat.com/10.1.2.4
-#EOF
-#   systemctl enable dnsmasq
-#   systemctl start  dnsmasq
-#   sed -i 's/^nameserver\(.*\)/nameserver 127.0.0.1\nnameserver\1/' /etc/resolv.conf
-# SHELL
-
   # Add yum repo
   config.vm.provision "file",
     source: "./custom.repo",
