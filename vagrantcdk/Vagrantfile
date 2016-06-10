@@ -27,6 +27,16 @@ end
 Vagrant.configure(2) do |config|
   config.vm.box = "cdkv2"
 
+  # Add registry.access.redhat.com to /etc/hosts
+  config.vm.provision "shell",
+    inline: "grep registry.access.redhat.com /etc/hosts || echo '10.1.2.4 registry.access.redhat.com' >> /etc/hosts"
+
+  # Add registry.access.redhat.com to insecure registry
+  config.vm.provision "shell", inline: <<-SHELL
+    sed -i -e "s/# INSECURE_REGISTRY='--insecure-registry'/INSECURE_REGISTRY='--insecure-registry registry.access.redhat.com'/g" /etc/sysconfig/docker
+    systemctl restart docker
+  SHELL
+
   config.vm.provider "virtualbox" do |v, override|
     v.memory = VM_MEMORY
     v.cpus   = VM_CPU
@@ -42,10 +52,8 @@ Vagrant.configure(2) do |config|
 
   config.vm.network "private_network", ip: "#{PUBLIC_ADDRESS}"
 
-  if ENV.has_key?('SUB_USERNAME') && ENV.has_key?('SUB_PASSWORD')
-    config.registration.username = ENV['SUB_USERNAME']
-    config.registration.password = ENV['SUB_PASSWORD']
-  end
+  # Skip vagrant registration because we are using offline repos
+  config.registration.skip = true
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
   if Vagrant::Util::Platform.windows?
