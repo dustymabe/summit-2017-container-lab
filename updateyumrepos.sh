@@ -33,12 +33,12 @@ EOF
 )
 
 files=(
-./custom.repo
-./lab1/custom.repo
-./lab1/registry/custom.repo
-./lab2/bigapp/custom.repo
-./lab3/mariadb/custom.repo
-./lab3/wordpress/custom.repo
+./vagrantcdk/custom.repo
+./labs/lab1/custom.repo
+./labs/lab1/registry/custom.repo
+./labs/lab2/bigapp/custom.repo
+./labs/lab3/mariadb/custom.repo
+./labs/lab3/wordpress/custom.repo
 )
 
 for file in ${files[@]}; do
