@@ -33,7 +33,7 @@ In a production environment we still have several problems:
 * **Graph**: Declarative representation of dependencies in the context of a
              multi-container Nulecule application
 
-This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
+This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
 
 ## Packaging Wordpress
 

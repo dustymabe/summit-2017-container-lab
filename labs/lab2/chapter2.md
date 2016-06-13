@@ -11,7 +11,7 @@ of multiple services. We will also observe several bad practices when
 composing Dockerfiles and explore how to avoid those mistakes. In lab 3
 we will decompose the application into more manageable pieces.
 
-This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
+This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
 
 Expected completion: 20-25 minutes
 
@@ -137,7 +137,9 @@ MAINTAINER Student <student@foo.io>
 # ADD set up scripts
 ADD  scripts /scripts
 
->>> If a local script changes then we have to rebuild from scratch
+>>> If a local script changes then we have to rebuild the entire
+>>> docker image from this point on and we don't take advantage of 
+>>> the cache
 
 RUN chmod 755 /scripts/*
 
@@ -180,7 +182,7 @@ RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1
 RUN rm /latest.tar.gz
 RUN chown -R apache:apache /var/www/
 
->>> Can group above statements into one multiline statement to minimize 
+>>> Can group above 4 statements into one multiline statement to minimize 
 >>> space used by intermediate layers. (i.e. latest.tar.gz would not be 
 >>> stored in any image).
 

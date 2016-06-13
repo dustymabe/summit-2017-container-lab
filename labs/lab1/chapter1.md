@@ -8,13 +8,15 @@ itself as well as walk through some exercises with a couple of Docker images
 / containers to tell a complete story and point out some things that you might 
 have to consider when containerizing your application.
 
-This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
+This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
 
 Use Vagrant to bring up and ssh into the machine:
 
-cd ~/summit-2016-container-lab/vagrantcdk
+```
+cd ~/summit-2016-container-lab/vagrantcdklab
 vagrant up
 vagrant ssh
+```
 
 Expected completion: 15-20 minutes
 
@@ -48,8 +50,8 @@ cat /etc/sysconfig/docker-storage
 cat /etc/sysconfig/docker-network
 ```
 
-* Now check the status of docker and make sure it is running before moving forward.
-  It should have been brought up automatically for us by the CDK.
+Now check the status of docker and make sure it is running before moving forward.
+It should have been brought up automatically for us by the CDK.
 
 ```bash
 sudo systemctl status docker
@@ -60,7 +62,7 @@ sudo systemctl status docker
 Now that we see how the Docker startup process works, we should make sure we 
 know how to get help when we need it.  Run the following commands to get familiar 
 with what is included in the Docker package as well as what is provided in the man 
-pages. Spend some time exploring here, it is helpful. When you run `docker info` 
+pages. Spend some time exploring here. When you run `docker info` 
 check out the storage configuration. The CDK automatically sets up storage 
 for us by creating an LVM thin pool for use as a device mapper direct docker 
 storage backend.
@@ -87,10 +89,9 @@ docker run --help
 docker info
 ```
 
-Take a look at the Docker images on the system. These images have been cached
-here ahead of time. You should see some Openshift images too, which are cached 
-in the CDK so you can start OpenShift without having to wait for the
-container images to download.
+Take a look at the Docker images on the system. You should see some 
+Openshift images that are cached in the CDK so you can start OpenShift 
+without having to wait for the container images to download.
   
 ```bash
 docker images
@@ -177,7 +178,7 @@ curl http://localhost
 Apache
 ```
 
-* Now that we have built an image, launched a container and confirmed that it is 
+Now that we have built an image, launched a container and confirmed that it is 
 running, lets do some further inspection of the container. We should take a look 
 at the container IP address.  Let's use `docker inspect` to do that.
 

@@ -3,7 +3,7 @@
 In this lab we introduce how to orchestrate a multi-container application in 
 OpenShift.
 
-This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
+This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
 
 Expected completion: 40-60 minutes
 
@@ -253,10 +253,10 @@ the mariadb pod file. We also use the environment variables that are specified
 by the wordpress container, although they need to get the same values as the
 ones in the mariadb pod.
 
-Ok, so, lets launch our pods and make sure they come up correctly. In
+Ok, so, let's launch our pods and make sure they come up correctly. In
 order to do this, we need to introduce the ```oc``` command which is
 what drives OpenShift. Generally, speaking, the format of ```oc```
-commands is ```kubetctl <operation> <kind>```. Where ```<operation>``` is
+commands is ```oc <operation> <kind>```. Where ```<operation>``` is
 something like ```create```, ```get```, ```remove```, etc. and ```kind```
 is the ```kind``` from the pod files.
 
@@ -354,8 +354,7 @@ spec:
 Here you may notice there is no reference to the wordpress pod at all.
 Any pod that provides "wordpress capabilities" can be targeted by this
 service. Pods can claim to provide "wordpress capabilities" through their
-labels. This service is programmed to target pods with a label of  
-```name: wordpress```. 
+labels. This service is programmed to target pods with a label of ```name: wordpress```.
 
 Another example of this might have been if we had made the mariadb-service just
 a "db" service and then, the pod could be mariadb, mysql, sqlite, anything really,

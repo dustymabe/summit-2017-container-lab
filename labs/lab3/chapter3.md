@@ -4,7 +4,7 @@ In this lab you will deconstruct an application into microservices, creating
 a multi-container application. In this process we explore the challenges of 
 networking, storage and configuration.
 
-This lab should be performed on rhel-cdk.example.com unless otherwise instructed.
+This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
 
 Expected completion: 20-30 minutes
 
