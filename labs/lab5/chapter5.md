@@ -52,28 +52,20 @@ from the upstream Atomic App Nulecule Library.
 
 ### The Nulecule file
 
-1. Change directory into the Copy the Nulecule template files to the workspace directory.
+* Change directory into the Copy the Nulecule template files to the workspace directory.
 
 ```
 mkdir -p ~/workspace/nulecule/
 cp -R ~/labs/lab5/* ~/workspace/nulecule/
 ```
 
-1. Open the Nulecule file for the wordpress Atomic App in a text editor.
+* Open the Nulecule file for the wordpress Atomic App in a text editor.
 
 ```
 vi ~/workspace/nulecule/wordpress-atomicapp/Nulecule
 ```
 
-Take a look at the Nulecule file. There are two primary sections: metadata 
-and graph. The graph is a list of components to deploy, like the database 
-and wordpress services in our lab. The artifacts are a list of provider 
-files to deploy. In this lab we have one provider, OpenShift, and the 
-provider artifact files are the service and pod YAML files. The params 
-section defines the parameters that may be changed when the application 
-is deployed.
-
-1. Open the Nulecule file in an editor. The file is reproduced here:
+The file is reproduced here for convenience:
 
 ```
 ---
@@ -107,9 +99,17 @@ graph:
         description: wordpress database name
 ```
 
+There are two primary sections: metadata 
+and graph. The graph is a list of components to deploy, like the database 
+and wordpress services in our lab. The artifacts are a list of provider 
+files to deploy. In this lab we have one provider, OpenShift, and the 
+provider artifact files are the service and pod YAML files. The params 
+section defines the parameters that may be changed when the application 
+is deployed.
 
-1. Let's inspect the file. The graph specifies the different elements 
-   of the Atomic App:
+
+* Inspect the file. The graph specifies the different elements 
+  of the Atomic App:
 
 ```
 graph:
@@ -120,7 +120,7 @@ graph:
 ```
 
 Above you can see there is a ```mariadb``` part of the application
-as well as a ```wordpress`` part of the application. We have elected to
+as well as a ```wordpress``` part of the application. We have elected to
 pull a database that someone else has packaged for us. In the file
 we have two lines commented out. You can easily choose which one you
 should use based on if you are in a lab setting (disconnected), or if
@@ -132,7 +132,7 @@ and uncomment the ```docker://mariadb-rhel7-atomicapp``` line.
 If you are following along at home delete the ```docker://mariadb-rhel7-atomicapp```
 and uncomment the ```docker://projectatomic/mariadb-centos7-atomicapp``` line.
 
-1. Inspect the artifacts that are to be packaged in the Nulecule:
+* Inspect the artifacts that are to be packaged in the Nulecule:
 
 ```
   - name: wordpress
@@ -176,7 +176,7 @@ Wait. Something is different. What are those ```$image```, ```$db_user```,
 parameters that correspond to the ```params``` section of the
 Nulecule file. We'll check that out below.
 
-1. Inspect the parameters in the Nulecule:
+* Inspect the parameters in the Nulecule:
 
 ```
     params:
@@ -198,15 +198,15 @@ questions. You'll notice that we have pre-populated the default image
 to be our wordpress application we already pushed to the registry in lab3.
 
 
-1. Save and close the Nulecule file.
+* Save and close the Nulecule file.
 
-
-Save and close the Nulecule file.
+As a final step, save the file and close it.
 
 
 ## Building the Atomic App
 
-Before we test our work let's switch back to local context.
+Before we test our work let's switch back to the OpenShift running on
+the CDK.
 
 ```bash
 oc login --insecure-skip-tls-verify=true -u openshift-dev -p devel localhost:8443
@@ -222,31 +222,31 @@ oc new-project sample-project
 
 Now we'll deploy Wordpress as an Atomic app.
 
-1. We will run the atomic app base container image where the `Nulecule` file 
-   is in `~/workspace`.
+We will run the atomic app base container image where the `Nulecule` file 
+is in `~/workspace`.
 
 ```
 cd ~/workspace/nulecule/wordpress-atomicapp/
 ```
 
-1. Inspect the Atomic app base container image. Notice how the `RUN` LABEL 
-   mounts in the current working directory with the `-v ${PWD}:/atomicapp` option. 
-   This allows for the files in the current directory to be inspected by atomicapp.
+Inspect the Atomic app base container image. Notice how the `RUN` LABEL 
+mounts in the current working directory with the `-v ${PWD}:/atomicapp` option. 
+This allows for the files in the current directory to be inspected by atomicapp.
 
 ```
 docker pull devstudio/atomicapp:0.5.0
 sudo atomic info devstudio/atomicapp:0.5.0
 ```
 
-1. Generate an answers file for the Atomic App
+Generate an answers file for the Atomic App
 
 ```
 sudo -E atomic run devstudio/atomicapp:0.5.0 --mode genanswers ./
 ```
 
-1. Edit the `answers.conf` file to populate variables as well as point Atomic
-   App at the appropriate OpenShift instance. The contents should look
-   something like this:
+Edit the `answers.conf` file to populate variables as well as point Atomic
+App at the appropriate OpenShift instance. The contents should look
+something like this:
 
 ```
 [mariadb]
@@ -265,8 +265,8 @@ provider = openshift
 provider-config = /home/vagrant/.kube/config
 ```
 
-1. Run the Atomic app. This will look at the files that we just created in the 
-   current directory and bring up the application in Openshift
+Run the Atomic app. This will look at the files that we just created in the 
+current directory and bring up the application in Openshift
 
 ```
 sudo -E atomic run devstudio/atomicapp:0.5.0 ./
