@@ -478,32 +478,30 @@ oc get pods
 oc get services
 ```
 
-
-XXXXXXX End lab here - below steps are broken for now.
-
-Now we can check to make sure the site is running. However, first we
-need a URL for the service.
+Again, before we access the service, let's expose the route.
 
 ```bash
-oc get endpoints
+oc expose svc/wordpress
 ```
-
-Which should give you a result like:
 
 ```bash
-NAME            ENDPOINTS
-kubernetes      192.168.135.3:6443
-kubernetes-ro   192.168.135.3:7080
-mariadb         172.17.0.1:3306
-wpfrontend      172.17.0.2:80
+$ oc get routes
+NAME        HOST/PORT                                                 PATH      SERVICE     LABELS           INSECURE POLICY   TLS TERMINATION
+wordpress   wordpress-production.deploy.example.com.10.1.2.3.xip.io             wordpress   name=wordpress 
 ```
 
-Now to test it all you need to do is access the IP address and port of the 
-service that is running.  You can either use a browser or curl:
+And finally, access the site via the link:
 
-```bash
-curl -L http://deploy.example.com
+```
+curl -L http://wordpress-production.deploy.example.com.10.1.2.3.xip.io
+or
+point your browser to the URL
 ```
 
-Ok, now you can move on to lab5, where we will show you how to create an 
-application much more easily.
+
+Now, since we are done with the "production" server, let's delete the
+project so all pods/services get cleaned up:
+
+```
+oc delete project production
+```
