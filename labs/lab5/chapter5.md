@@ -52,7 +52,7 @@ from the upstream Atomic App Nulecule Library.
 
 ### The Nulecule file
 
-* Change directory into the Copy the Nulecule template files to the workspace directory.
+* Create a directory and copy the Nulecule template files into place.
 
 ```
 mkdir -p ~/workspace/nulecule/
@@ -231,7 +231,7 @@ cd ~/workspace/nulecule/wordpress-atomicapp/
 
 Inspect the Atomic app base container image. Notice how the `RUN` LABEL 
 mounts in the current working directory with the `-v ${PWD}:/atomicapp` option. 
-This allows for the files in the current directory to be inspected by atomicapp.
+This allows for the files in the current directory to be used by atomicapp.
 
 ```
 docker pull devstudio/atomicapp:0.5.0
