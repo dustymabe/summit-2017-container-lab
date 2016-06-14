@@ -6,23 +6,13 @@ If you are unfamiliar with Vagrant, that is OK, as we will cover the basics here
 
 Ok, to get started, on Enterprise Linux systems like Red Hat Enterprise Linux and CentOS, Vagrant is delivered as a [software collection](https://www.softwarecollections.org/en/docs/) which is a alternate packaging technique that allows for independent versions of components. Specifically, this collection allows Vagrant to choose the version of Ruby and Ruby libraries that it prefers even if they are not the versions provided by the distribution. Again, we will be covering the basics of how to use a software collection (often referred to as an "scl" for short) for the purposes of this lab but you should definitely investigate them more as software collections are also quite powerful.
 
-## Enabling Vagrant
+Finally, one last thing to introduce, the Container Development Kit (CDK). The CDK is a prebuilt Vagrant VM with RHEL installed and some tools for working with containers, namely, docker, kubernetes, and openshift. Again, we will briefly discuss the CDK here, but you should definitely [dig in more](http://developers.redhat.com/products/cdk/) as you have time.
 
-If you are attending the lab, you can skip all these steps and move directly to [Get Lab Materials](#get-materials) as the steps have already been performed on the machine you are using.
+## Getting Vagrant and the CDK
 
-To get started with Vagrant, you first want to install an rpm which manages the software collection repository. This is not strictly necessary, but helps:
+If you are attending the lab, you can skip this step and move directly to [Get Lab Materials](#get-materials) as the steps have already been performed on the machine you are using.
 
-```bash
-$ sudo yum install centos-release-scl
-```
-
-now install the collection:
-
-```bash
-$ sudo yum install sclo-vagrant1
-```
-
-Largely cribbed from the [Vagrant Software Collection installation page](https://www.softwarecollections.org/en/scls/rhscl/sclo-vagrant1/)
+You will probably find it easiest to head over to developers.redhat.com and follow the "[install the Container Development Kit](http://developers.redhat.com/products/cdk/get-started/)" instructions. The instructions cover installing Vagrant and the Container Development Kit on Windows, MacOS, and Linux. 
 
 ## <a name="#get-materials"></a>Get Lab Materials
 
@@ -90,7 +80,7 @@ $ sudo virsh list
 
 ```
 
-Now we can actually go inside the machine (ignoring the vagrantRepoHost_default which is just a helper VM for the lab) with:
+Now we can actually step inside the machine (ignoring the vagrantRepoHost_default which is just a helper VM for the lab) with:
 
 ```bash
 $ vagrant ssh
@@ -127,6 +117,14 @@ $ ip addr
        valid_lft forever preferred_lft forever
 <snip />
 ```
+
+## Container Development Kit (CDK) Walkthrough
+
+The cool thing is, we actually launched the CDK VM by launching the above Vagrantfile. The CDK gives a couple options (through the use of [different Vagrantfiles](https://developers.redhat.com/download-manager/file/cdk-2.0.0.zip)) but in this case, we launched the "OpenShift in a Box" VM (aka rhel-ose in the cdk.zip). The CDK provides a simple to use and launch instance of the same OpenShift PaaS you would use at work. Why is a PaaS included in a product, much less a lab, focused on Containers? Well, the latest version of OpenShift, actually runs Docker Containers to host your "Platform" (in the PaaS sense) and your application.
+
+If you would like to explore the OpenShift Console, you can see it running in your OpenShift instance, if you open a browser. Let's go ahead and try it. Open Firefox from the Applications menu and navigate to `https://10.1.2.2:8443/console/`. Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `admin/admin` or to see the less privileged experience, use `openshift-dev/devel` for the `username/password`.
+
+## Back to Vagrant Walkthrough
 
 Now let's wrap this up by shutting down the VM. However, we don't want to completely remove the VM just "turn it off." In order to do this we execute `vagrant halt` which will shut the machine down and have it stop using our resources. One more note, you can also use `vagrant destroy` when you are completely done with a Vagrant VM which will not only shut it down but completely wipe out the VM. So, useful when a project is getting mothballed or, in this case, useful if you get in to a bad state in the lab and want to just give up and start again.
 
