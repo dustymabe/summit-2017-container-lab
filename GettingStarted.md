@@ -1,10 +1,10 @@
 ## Introduction
 
-In order to make this lab simple to work with we are going to leverage
+In order to make this lab simple to work with, we are going to leverage
 a tool known as the Container Development Kit (CDK). The CDK is a prebuilt 
-Vagrant VM with RHEL installed as well as all the tools you need for
-working building and developing software with containers. The included
-software includes docker, kubernetes and/or OpenShift. 
+Vagrant VM with RHEL installed. The VM also has all the tools you need for
+building and developing software with containers. The included
+software includes docker, kubernetes and, optionally, OpenShift. 
 
 By leveraging [Vagrant](https://www.vagrantup.com/) the CDK gives us a reliable, 
 reproducible environment to iterate on. If you are unfamiliar with Vagrant, 
@@ -75,7 +75,7 @@ beyond the scope of this lab, but you can find out more details in the
 [documentation](https://www.vagrantup.com/docs/vagrantfile/).
 
 
-First up, `vagrant up`: this command asks your hypervisor to launch the virtual 
+First, `vagrant up`: this command asks your hypervisor to launch the virtual 
 machine described in the Vagrantfile. The operation may be a "create and launch 
 VM" or a "re-launch an existing VM" and it is largely transparent to the user. 
  
@@ -86,7 +86,7 @@ $ cd ~/summit-2016-container-lab/vagrantcdk
 $ vagrant up
 ```
 
-You should get a lot of feedback about the launch of the VM but, if you are using the lab VM or have run this before, you will get a lot less feedback. As long as you don't get errors (delineated, normally, by red font) you are in good shape.
+You should get a lot of feedback about the launch of the VM but, if you are using the lab VM or have run this before, you will get a lot less. As long as you don't get errors (delineated, normally, by red font) you are in good shape.
 
 OK, so now you have a running VM. Ask vagrant to tell us the status:
 
@@ -98,7 +98,6 @@ default                   running (libvirt)
 
 The Libvirt domain is running. To stop this machine, you can run
 `vagrant halt`. To destroy the machine, you can run `vagrant destroy`.
-
 ```
 
 Now we can actually step inside the machine with:
@@ -141,7 +140,9 @@ much less a lab, focused on Containers? Well, the latest version of OpenShift,
 actually runs Docker Containers to host your "Platform" (in the PaaS sense) 
 and your application.
 
-If you would like to explore the OpenShift Console, you can see it running in your OpenShift instance, if you open a browser. Let's go ahead and try it. Open Firefox from the Applications menu and navigate to `https://10.1.2.2:8443/console/`. Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `admin/admin` or to see the less privileged experience, use `openshift-dev/devel` for the `username/password`.
+If you would like to explore the OpenShift Console, you can see it running in your OpenShift instance, if you open a browser. Let's go ahead and try it. 
+
+Open Firefox from the Applications menu and navigate to `https://10.1.2.2:8443/console/`. Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `admin/admin` or to see the less privileged experience, use `openshift-dev/devel` for the `username/password`.
 
 ## Setting Up For the Remaining Labs
 
@@ -158,9 +159,8 @@ $ vagrant destroy
 
 And to set up for the next lab sections we'll go ahead and bring up
 two Vagrant VMs. One of them is still the CDK, but with a customized
-Vagrantfile for this lab. This box will be known as **rhel-cdk.example.com** 
+`Vagrantfile` for this lab. This box will be known as **rhel-cdk.example.com** 
 for the purposes of this lab and will have the IP address `10.1.2.2`.
-
 
 ```bash
 $ cd ~/summit-2016-container-lab/vagrantcdklab
@@ -177,5 +177,4 @@ $ cd ~/summit-2016-container-lab/vagrantAtomicCluster
 $ vagrant up
 ```
 
-
-After you bring up each machine you are then ready to move on to lab1.
+After you bring up each machine you are then ready to move on to lab 1.
