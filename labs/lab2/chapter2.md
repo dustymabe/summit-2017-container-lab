@@ -1,9 +1,9 @@
 # LAB 2: Analyzing a Monolithic Application
 
-Typically it is best to break down services into the simplest
+Typically, it is best to break down services into the simplest
 components and then containerize each of them independently. However,
 when initially migrating an application it is not always easy to break
-it up into little pieces and you must start with big containers and
+it up into little pieces but you can start with big containers and
 work towards breaking them into smaller pieces. 
 
 In this lab we will create an all-in-one container image comprised 
@@ -67,10 +67,11 @@ Take a look at some of the arguments we are passing to Docker.  We are telling D
 
 ## Exploring the Running Container
 
-Now that the container is running we will explore the running
+Now that the container is running we will explore the 
 container to see what's going on inside. First off, the processes were
 started and any output that goes to stdout will come to the console of
-the container. You can run `docker logs` to see the output. To follow or "tail" the logs use the `-f` option.
+the container. You can run `docker logs` to see the output. To follow 
+or "tail" the logs use the `-f` option.
 
 **__NOTE:__** You are able to use the **name** of the container rather
 than the container id for most `docker` commands.
@@ -182,7 +183,7 @@ RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1
 RUN rm /latest.tar.gz
 RUN chown -R apache:apache /var/www/
 
->>> Can group above 4 statements into one multiline statement to minimize 
+>>> Can group above 4 statements into one multi-line statement to minimize 
 >>> space used by intermediate layers. (i.e. latest.tar.gz would not be 
 >>> stored in any image).
 
@@ -194,7 +195,7 @@ More generally:
 
 * Use a specific tag for the source image. Image updates may break things.
 * Place rarely changing statements towards the top of the file. This allows the re-use of cached image layers when rebuilding.
-* Group statements into multiline statements. This avoids layers that have files needed only for build.
+* Group statements into multi-line statements. This avoids layers that have files needed only for build.
 * Use `LABEL RUN` instruction to prescribe how the image is to be run.
 * Avoid running application as root user.
 * Use `VOLUME` instruction to create a host mount point for persistent storage.
