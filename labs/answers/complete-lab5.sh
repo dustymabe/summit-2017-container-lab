@@ -20,10 +20,11 @@ docker pull devstudio/atomicapp:0.5.0
 sudo atomic info devstudio/atomicapp:0.5.0
 
 # Generate Answers file
+cd ~/workspace/nulecule/wordpress-atomicapp/
 sudo -E atomic run devstudio/atomicapp:0.5.0 --mode genanswers ./
 
 # Populate the contents of the answers file
-CONTENTS="
+export CONTENTS="
 [mariadb]
 image = rhel-cdk.example.com:5000/mariadb
 db_pass = password
