@@ -1,5 +1,6 @@
 #!/bin/bash
 #execute the functionality in lab5
+set -eux
 
 mkdir -p ~/workspace/nulecule/
 cp -R ~/labs/lab5/* ~/workspace/nulecule/
