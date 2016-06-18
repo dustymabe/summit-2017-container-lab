@@ -124,12 +124,12 @@ as well as a ```wordpress``` part of the application. We have elected to
 pull a database that someone else has packaged for us. In the file
 we have two lines commented out. You can easily choose which one you
 should use based on if you are in a lab setting (disconnected), or if
-you are in a non-lab (connected to internet) setting.
+you are in a non-lab (connected to the internet) setting.
 
 If you are in a lab, delete the ```docker://projectatomic/mariadb-centos7-atomicapp```
 and uncomment the ```docker://mariadb-rhel7-atomicapp``` line.
 
-If you are following along at home delete the ```docker://mariadb-rhel7-atomicapp```
+If you are following along at home, delete the ```docker://mariadb-rhel7-atomicapp```
 and uncomment the ```docker://projectatomic/mariadb-centos7-atomicapp``` line.
 
 * Inspect the artifacts that are to be packaged in the Nulecule:
@@ -220,16 +220,16 @@ oc delete project sample-project
 oc new-project sample-project
 ```
 
-Now we'll deploy Wordpress as an Atomic app.
+Now we'll deploy Wordpress as an Atomic App.
 
-We will run the atomic app base container image where the `Nulecule` file 
+We will run the Atomic App base container image where the `Nulecule` file 
 is in `~/workspace`.
 
 ```
 cd ~/workspace/nulecule/wordpress-atomicapp/
 ```
 
-Inspect the Atomic app base container image. Notice how the `RUN` LABEL 
+Inspect the Atomic App base container image. Notice how the `RUN` LABEL 
 mounts in the current working directory with the `-v ${PWD}:/atomicapp` option. 
 This allows for the files in the current directory to be used by atomicapp.
 
@@ -265,7 +265,7 @@ provider = openshift
 provider-config = /home/vagrant/.kube/config
 ```
 
-Run the Atomic app. This will look at the files that we just created in the 
+Run the Atomic App. This will look at the files that we just created in the 
 current directory and bring up the application in Openshift
 
 ```
@@ -273,7 +273,7 @@ sudo -E atomic run devstudio/atomicapp:0.5.0 ./
 ```
 
 The MariaDB Atomic App will be downloaded. Since it is a remote source the MariaDB 
-Atomic App files are placed in directory `external`. Once complete, the wordpress 
+Atomic App files are placed in the directory `external`. Once complete, the wordpress 
 and mariadb pods and services should be deployed to OpenShift.
 
 Check the deployment progress in the same way we did in lab 4.
