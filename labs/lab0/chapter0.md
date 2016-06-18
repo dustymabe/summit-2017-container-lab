@@ -4,13 +4,13 @@ In order to make this lab simple to work with, we are going to leverage
 a tool known as the Container Development Kit (CDK). The CDK is a prebuilt 
 Vagrant VM with RHEL installed. The VM also has all the tools you need for
 building and developing software with containers. The included
-software includes docker, kubernetes and, optionally, OpenShift. 
+software provides docker, kubernetes and, optionally, OpenShift. 
 
 By leveraging [Vagrant](https://www.vagrantup.com/) the CDK gives us a reliable, 
 reproducible environment to iterate on. If you are unfamiliar with Vagrant, 
-that is OK, as we will cover the basics here. However, if you get the time you 
-should really look in to it more deeply as it is very powerful and we are just 
-scratching the surface.
+that is OK, as we will cover the basics here. However, in the future, you
+should really look in to it more deeply. We are just scratching the surface
+of Vagrant's capabilities.
 
 Unfortunately, we are just briefly discussing the CDK here. You should definitely 
 [dig in more](http://developers.redhat.com/products/cdk/) as you have time.
@@ -53,7 +53,7 @@ $ git clone https://github.com/dustymabe/summit-2016-container-lab
 
 ## Vagrant Walkthrough
 
-First off, only if you are on a CentOS or RHEL host, enable the Vagrant 
+First off, if you are on a CentOS or RHEL host, enable the Vagrant 
 Software Collection:
 
 ```bash
@@ -69,13 +69,13 @@ Vagrant 1.8.1
 ```
 
 Your major units of operation with Vagrant are `vagrant up`, `vagrant ssh`, 
-`vagrant halt`, and `vagrant destroy`. We will, quickly, walk through these. 
+`vagrant halt`, and `vagrant destroy`. We will walk through these. 
 All of these operations, and almost every other Vagrant command, use a "per 
 project configuration file" called a `Vagrantfile` to define the details of 
 one or more virtual machines that you are using in your project. A detailed 
 explanation of a Vagrantfile and all the magic you can do with it is well 
 beyond the scope of this lab, but you can find out more details in the 
-[documentation](https://www.vagrantup.com/docs/vagrantfile/).
+[Documentation](https://www.vagrantup.com/docs/vagrantfile/).
 
 
 First, `vagrant up`: this command asks your hypervisor to launch the virtual 
@@ -140,7 +140,7 @@ the Vagrantfile in the previous section. The CDK gives a couple options (through
 [different Vagrantfiles](https://developers.redhat.com/download-manager/file/cdk-2.0.0.zip)) 
 but in this case, we launched the "OpenShift in a Box" VM (aka rhel-ose in 
 the cdk.zip). The CDK provides a simple to use and launch instance of the 
-same OpenShift PaaS you would use at work. Why is a PaaS included in a product, 
+same OpenShift PaaS you would use at work. Why is a PaaS included in a tool, 
 much less a lab, focused on Containers? Well, the latest version of OpenShift, 
 actually runs Docker Containers to host your "Platform" (in the PaaS sense) 
 and your application.
@@ -178,7 +178,7 @@ $ vagrant up
 ```
 
 The other one is a Red Hat Enterprise Linux Atomic Host Vagrant box, 
-that has a Vagrantfile that will set up and run OpenShift during bringup.
+that has a Vagrantfile that will set up and run OpenShift during launch.
 This box will be known as **deploy.example.com** for the purposes of
 this lab and will have the IP address `10.1.2.3`.
 
@@ -187,4 +187,5 @@ $ cd ~/summit-2016-container-lab/vagrantAtomicCluster
 $ vagrant up
 ```
 
-After you bring up each machine you are then ready to move on to lab 1.
+After you bring up each machine you are then ready to move on to the
+next lab.
