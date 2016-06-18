@@ -30,7 +30,7 @@ docker port wordpress
 
 and taking look at the "PORTS" column for the wordpress site. You 
 can also get your ip address by looking at the address for the 
-eth0 interface after you execute:
+eth1 interface after you execute:
 
 ```bash
 ip addr show dev eth1
@@ -48,8 +48,8 @@ docker stop mariadb
 ```
 
 Take a look at the site in your web browser or using curl now. And,
-imagine, explosions! *making sound effects will be much appreciated
-by your lab mates.*
+imagine, explosions! (*making sound effects will be much appreciated
+by your lab mates.*)
 
 ```bash
 web browser -> http://rhel-cdk.example.com OR curl -L http://rhel-cdk.example.com
@@ -90,7 +90,7 @@ docker rm -f wordpress mariadb
 
 Starting and stopping is definitely easy, and fast. However, it is still pretty manual.
 What if we could automate the recovery? Or, in buzzword terms, "ensure the service 
-remains up"? Enter Kubernetes/OpenShift.
+remains available"? Enter Kubernetes/OpenShift.
 
 ## Starting OpenShift on the CDK
 
@@ -127,7 +127,7 @@ credentials to log in to ```https://10.1.2.2:8443``` using firefox.
 ## Pod Creation
 
 Let's get started by talking about a pod. A pod is a set of containers that provide 
-one "service." How do you know what to put in a particular pod? Well, pod's containers
+one "service." How do you know what to put in a particular pod? Well, a pod's containers
 need to be co-located on a host and need to be spawned and re-spawned together.
 So, if the containers always need to be running on the same docker host, well, then 
 they should be a pod.
