@@ -223,7 +223,6 @@ down container at this point - this is by design. You may find yourself restrict
 
 ```bash
 ps aux
-ifconfig
 ls /bin
 cat /etc/hosts
 ip a
