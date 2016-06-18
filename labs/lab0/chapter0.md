@@ -30,7 +30,8 @@ MacOS, and Linux.
 
 ## Get Lab Materials
 
-For the convience of users of the lab, we created a script and installed it on the Lab VM. If you are in the lab, please run the following:
+For the convience of users of the lab, we created a script and installed 
+it on the Lab VM. If you are in the lab, please run the following:
 
 ```bash
 $ cd ~/
@@ -52,13 +53,15 @@ $ git clone https://github.com/dustymabe/summit-2016-container-lab
 
 ## Vagrant Walkthrough
 
-First off, only if you are on a CentOS or RHEL host, enable the Vagrant Software Collection:
+First off, only if you are on a CentOS or RHEL host, enable the Vagrant 
+Software Collection:
 
 ```bash
 $ scl enable sclo-vagrant1 bash
 ```
 
-Ok, so now you have Vagrant. Make sure by asking for the version (1.8.1 at time of writing):
+Ok, so now you have Vagrant. Make sure by asking for the version (1.8.1 
+at time of writing):
 
 ```bash
 $ vagrant --version
@@ -86,7 +89,9 @@ $ cd ~/summit-2016-container-lab/vagrantcdk
 $ vagrant up
 ```
 
-You should get a lot of feedback about the launch of the VM but, if you are using the lab VM or have run this before, you will get a lot less. As long as you don't get errors (delineated, normally, by red font) you are in good shape.
+You should get a lot of feedback about the launch of the VM but, if you are 
+using the lab VM or have run this before, you will get a lot less. As long 
+as you don't get errors (delineated, normally, by red font) you are in good shape.
 
 OK, so now you have a running VM. Ask vagrant to tell us the status:
 
@@ -140,9 +145,14 @@ much less a lab, focused on Containers? Well, the latest version of OpenShift,
 actually runs Docker Containers to host your "Platform" (in the PaaS sense) 
 and your application.
 
-If you would like to explore the OpenShift Console, you can see it running in your OpenShift instance, if you open a browser. Let's go ahead and try it. 
+If you would like to explore the OpenShift Console, you can see it running 
+in your OpenShift instance, if you open a browser. Let's go ahead and try it. 
 
-Open Firefox from the Applications menu and navigate to `https://10.1.2.2:8443/console/`. Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `admin/admin` or to see the less privileged experience, use `openshift-dev/devel` for the `username/password`.
+Open Firefox from the Applications menu and navigate to 
+`https://10.1.2.2:8443/console/`. Once it loads (and you bypass the bad 
+certificate error), you can log in to the console using the default 
+`admin/admin` or to see the less privileged experience, use 
+`openshift-dev/devel` for the `username/password`.
 
 ## Setting Up For the Remaining Labs
 
