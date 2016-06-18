@@ -10,11 +10,11 @@ have to consider when containerizing your application.
 
 This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
 
-Use Vagrant to bring up and ssh into the machine:
+The **rhel-cdk.example.com** machine should have been brought up in
+lab0. You can access that machine using the following commands:
 
 ```
 cd ~/summit-2016-container-lab/vagrantcdklab
-vagrant up
 vagrant ssh
 ```
 
@@ -225,14 +225,14 @@ down container at this point - this is by design. You may find yourself restrict
 ps aux
 ls /bin
 cat /etc/hosts
-ip a
+ip addr
 ```
 
 Well, what can we do?  You can install software into this container.
 
 ```bash
 yum -y install iproute
-ip a
+ip addr
 ```
 
 Exit the container namespace with `CTRL+d` or `exit`.
