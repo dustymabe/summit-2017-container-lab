@@ -236,7 +236,7 @@ Now we are ready to build the images to test our Dockerfiles.
             docker ps
             curl -L http://localhost
 
-You may also load the Wordpress application in a browser to test full functionality.
+You may also load the Wordpress application in a browser to test its full functionality.
 
 ### Simplify running containers with the atomic CLI
 
@@ -259,7 +259,7 @@ to copy+paste from README files.
 
         docker build -t wordpress wordpress/
 
-1. Re-run the Wordpress image using the `atomic` CLI. We don't need to use complicated,
+1. Re-run the Wordpress image using the `atomic` CLI. We don't need to use a complicated,
    error-prone `docker run` string. Test using the methods from the earlier step.
 
         docker stop wordpress
