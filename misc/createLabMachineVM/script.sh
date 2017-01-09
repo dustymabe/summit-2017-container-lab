@@ -21,13 +21,13 @@ cat <<EOF > /etc/yum.repos.d/custom.repo
 [rhel-7-server-rpms]
 baseurl = http://192.168.122.1:8000/yumrepos/rhel-7-server-rpms
 sslverify = 0
-name = RHEL 7.2 DVD RPMs
+name = RHEL 7 Server - DVD RPMs
 enabled = 1
 gpgcheck = 0
 [vagrant-yumrepo]
 baseurl = http://192.168.122.1:8000/yumrepos/vagrant-yumrepo
 sslverify = 0
-name = RHEL 7.2 DVD RPMs
+name = RHEL 7 Server - DVD RPMs
 enabled = 1
 gpgcheck = 0
 EOF

@@ -10,7 +10,7 @@ repofile=$(cat <<EOF
 baseurl = http://10.1.2.4:8000/rhel-7-server-rpms
 #baseurl = http://registry.access.redhat.com:8000/rhel-7-server-rpms
 sslverify = 0
-name = RHEL 7.2 DVD RPMs
+name = RHEL 7 Server - DVD RPMs
 enabled = 1
 gpgcheck = 0
 
@@ -18,7 +18,7 @@ gpgcheck = 0
 baseurl = http://10.1.2.4:8000/rhel-7-server-updates-rpms
 #baseurl = http://registry.access.redhat.com:8000/rhel-7-server-updates-rpms
 sslverify = 0
-name = RHEL 7.2 Updated RPMs
+name = RHEL 7 Server - Updated RPMs
 enabled = 1
 gpgcheck = 0
 
@@ -26,7 +26,7 @@ gpgcheck = 0
 baseurl = http://10.1.2.4:8000/rhel-7-server-extras-rpms
 #baseurl = http://registry.access.redhat.com:8000/rhel-7-server-extras-rpms
 sslverify = 0
-name = A subset of RHEL 7.2 Server Extras
+name = A subset of RHEL 7 Server Extras
 enabled = 1
 gpgcheck = 0
 EOF

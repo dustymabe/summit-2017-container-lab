@@ -6,7 +6,7 @@ registry and a yum repo.
 
 The scripts in this directory help to create the lab machine.
 
-# Mount up RHEL 7.2 DVD and serve it from another terminal
+# Mount up RHEL 7 Server - DVD and serve it from another terminal
 sudo mount -o loop /mnt/rhel-server-7.2-x86_64-dvd.iso ./filestoshare/yumrepos/rhel-7-server-rpms/
 cd ./filestoshare/ && python -m SimpleHTTPServer
 

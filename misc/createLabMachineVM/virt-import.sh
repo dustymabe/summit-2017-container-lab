@@ -5,7 +5,7 @@ set -o errexit
 
 # A few tunable variables
 NAME='labvm'
-ORIGINDISK='/guests/images/rhel-guest-image-7.2-20160219.1.x86_64.qcow2' # RHEL 7.2-20160219.1
+ORIGINDISK='/guests/images/rhel-guest-image-7.2-20160219.1.x86_64.qcow2' # RHEL 7 Server --20160219.1
 ORIGINDISK='/guests/images/rhel-guest-image-7.2-20151102.0.x86_64.qcow2'
 DISK='/guests/images/labvm.qcow2'
 
