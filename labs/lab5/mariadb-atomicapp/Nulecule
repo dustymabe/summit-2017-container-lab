@@ -1,7 +1,7 @@
 ---
 specversion: 0.0.2
 
-id: mariadb-summit2016
+id: mariadb-summit2017
 metadata:
   name: MariaDB
   appversion: v1.0.0

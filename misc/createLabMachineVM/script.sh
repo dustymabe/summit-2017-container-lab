@@ -67,7 +67,7 @@ cp /opt/rh/sclo-vagrant1/root/usr/share/vagrant/gems/doc/vagrant-libvirt-*/polki
 # Add alias for pulling the lab down from github
 cat <<EOF > /usr/local/bin/getlab
 #!/bin/bash
-git clone https://github.com/dustymabe/summit-2016-container-lab
+git clone https://github.com/dustymabe/summit-2017-container-lab
 EOF
 chmod 755 /usr/local/bin/getlab
 

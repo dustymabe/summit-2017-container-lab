@@ -14,7 +14,7 @@ The **rhel-cdk.example.com** machine should have been brought up in
 lab0. You can access that machine using the following commands:
 
 ```
-cd ~/summit-2016-container-lab/vagrantcdklab
+cd ~/summit-2017-container-lab/vagrantcdklab
 vagrant ssh
 ```
 
