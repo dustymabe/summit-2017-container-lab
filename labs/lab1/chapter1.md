@@ -111,7 +111,7 @@ cd ~/labs/lab1
 cat Dockerfile
 ```
 ```dockerfile
-FROM registry.access.redhat.com/rhel:7.2
+FROM registry.access.redhat.com/rhel7
 MAINTAINER Student <student@foo.io>
 
 ADD ./custom.repo /etc/yum.repos.d/custom.repo
@@ -129,7 +129,7 @@ RUN chmod -v +x /run-apache.sh
 CMD ["/run-apache.sh"]
 ```
 
-Here you can see in the `FROM` command that we are pulling a RHEL 7.2 base image 
+Here you can see in the `FROM` command that we are pulling a RHEL 7 base image 
 that we are going to build on. We are also adding a custom yum repo file. In disconnected 
 lab environments this file will be used to reference a local yum repository.
 In non-disconnected environments you will get access to content by

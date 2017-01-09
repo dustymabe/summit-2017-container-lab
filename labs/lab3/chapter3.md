@@ -103,7 +103,7 @@ ls -lR wordpress
 
 1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-        FROM registry.access.redhat.com/rhel:7.2
+        FROM registry.access.redhat.com/rhel7
         MAINTAINER Student <student@foo.io>
 
 1. Add local files for this lab environment. This is only required for this lab.
@@ -145,7 +145,7 @@ Now we'll create the Wordpress Dockerfile.
 
 1. Add a `FROM` line that uses a specific image tag. Also add `MAINTAINER` information.
 
-        FROM registry.access.redhat.com/rhel:7.2
+        FROM registry.access.redhat.com/rhel7
         MAINTAINER Student <student@foo.io>
 
 1. Add local files for this lab environment. This is only required for this lab.
