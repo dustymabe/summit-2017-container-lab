@@ -10,7 +10,6 @@ ADD ./custom.repo /etc/yum.repos.d/custom.repo
 RUN yum -y update
 
 # Common Deps
-RUN yum -y install openssl procps-ng
 RUN yum -y install psmisc 
 
 # Deps for wordpress
