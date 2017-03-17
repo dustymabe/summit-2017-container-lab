@@ -70,7 +70,7 @@ The file is reproduced here for convenience:
 ```
 ---
 specversion: 0.0.2
-id: summit-2016-wp
+id: summit-2017-wp
 metadata:
   name: Wordpress
   appversion: v1.0.0

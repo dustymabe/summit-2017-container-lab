@@ -1,4 +1,4 @@
-# Summit Lab 2016: Containerizing Applications
+# Summit Lab 2017: Containerizing Applications
 
 1. **[LAB 0](labs/lab0/chapter0.md)** Introduction
 1. **[LAB 1](labs/lab1/chapter1.md)** Docker refresh

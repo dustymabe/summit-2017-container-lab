@@ -1,4 +1,4 @@
-# Mount the RHEL 7.2 iso under rpms dir 
+# Mount the RHEL 7 Server - iso under rpms dir 
 
 sudo mount -o loop /mnt/rhel-server-7.2-x86_64-dvd.iso ./yumrepos/rhel-7-server-rpms/
 

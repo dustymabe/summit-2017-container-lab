@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhel:7.2
+FROM registry.access.redhat.com/rhel7
 MAINTAINER Student <student@foo.io>
 
 ADD ./custom.repo /etc/yum.repos.d/custom.repo

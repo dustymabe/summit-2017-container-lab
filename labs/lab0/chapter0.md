@@ -36,7 +36,7 @@ it on the Lab VM. If you are in the lab, please run the following:
 ```bash
 $ cd ~/
 $ /usr/local/bin/getlab 
-Cloning into 'summit-2016-container-lab'...
+Cloning into 'summit-2017-container-lab'...
 remote: Counting objects: 478, done.
 remote: Total 478 (delta 0), reused 0 (delta 0), pack-reused 478
 Receiving objects: 100% (478/478), 13.66 MiB | 11.76 MiB/s, done.
@@ -48,7 +48,7 @@ found this file in:
 
 ```bash
 $ cd ~/
-$ git clone https://github.com/dustymabe/summit-2016-container-lab
+$ git clone https://github.com/dustymabe/summit-2017-container-lab
 ```
 
 ## Vagrant Walkthrough
@@ -85,7 +85,7 @@ VM" or a "re-launch an existing VM" and it is largely transparent to the user.
 OK, so, let's move in to a directory with a Vagrantfile and then launch the VM:
 
 ```bash
-$ cd ~/summit-2016-container-lab/vagrantcdk
+$ cd ~/summit-2017-container-lab/vagrantcdk
 $ vagrant up
 ```
 
@@ -162,7 +162,7 @@ not only shut down a VM, but also remove it completely. Any contents
 of the VM disk images will be lost:
 
 ```bash
-$ cd ~/summit-2016-container-lab/vagrantcdk
+$ cd ~/summit-2017-container-lab/vagrantcdk
 $ vagrant destroy
 ==> default: Removing domain...
 ```
@@ -173,7 +173,7 @@ two Vagrant VMs. One of them is still the CDK, but with a customized
 for the purposes of this lab and will have the IP address `10.1.2.2`.
 
 ```bash
-$ cd ~/summit-2016-container-lab/vagrantcdklab
+$ cd ~/summit-2017-container-lab/vagrantcdklab
 $ vagrant up
 ```
 
@@ -183,7 +183,7 @@ This box will be known as **deploy.example.com** for the purposes of
 this lab and will have the IP address `10.1.2.3`.
 
 ```bash
-$ cd ~/summit-2016-container-lab/vagrantAtomicCluster
+$ cd ~/summit-2017-container-lab/vagrantAtomicCluster
 $ vagrant up
 ```
 
