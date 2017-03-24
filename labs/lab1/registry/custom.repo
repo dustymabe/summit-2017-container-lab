@@ -1,23 +1,20 @@
 [rhel-7-server-rpms]
-baseurl = http://10.1.2.4:8000/rhel-7-server-rpms
-#baseurl = http://registry.access.redhat.com:8000/rhel-7-server-rpms
-sslverify = 0
-name = RHEL 7 Server - DVD RPMs
+metadata_expire = 86400
+baseurl = http://10.19.115.172/pub/rhel-7-server-rpms
+name = rhel-7-server-rpms
 enabled = 1
 gpgcheck = 0
 
-[rhel-7-server-updates-rpms]
-baseurl = http://10.1.2.4:8000/rhel-7-server-updates-rpms
-#baseurl = http://registry.access.redhat.com:8000/rhel-7-server-updates-rpms
-sslverify = 0
-name = RHEL 7 Server - Updated RPMs
+[rhel-7-server-optional-rpms]
+metadata_expire = 86400
+baseurl = http://10.19.115.172/pub/rhel-7-server-optional-rpms
+name = rhel-7-server-optional-rpms
 enabled = 1
 gpgcheck = 0
 
 [rhel-7-server-extras-rpms]
-baseurl = http://10.1.2.4:8000/rhel-7-server-extras-rpms
-#baseurl = http://registry.access.redhat.com:8000/rhel-7-server-extras-rpms
-sslverify = 0
-name = A subset of RHEL 7 Server Extras
+metadata_expire = 86400
+baseurl = http://10.19.115.172/pub/rhel-7-server-extras-rpms
+name = rhel-7-server-extras-rpms
 enabled = 1
 gpgcheck = 0
