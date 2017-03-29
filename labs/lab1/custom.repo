@@ -1,20 +1,20 @@
 [rhel-7-server-rpms]
 metadata_expire = 86400
-baseurl = http://10.19.115.172/pub/rhel-7-server-rpms
+baseurl = http://192.168.122.250/pub/rhel-7-server-rpms
 name = rhel-7-server-rpms
 enabled = 1
 gpgcheck = 0
 
 [rhel-7-server-optional-rpms]
 metadata_expire = 86400
-baseurl = http://10.19.115.172/pub/rhel-7-server-optional-rpms
+baseurl = http://192.168.122.250/pub/rhel-7-server-optional-rpms
 name = rhel-7-server-optional-rpms
 enabled = 1
 gpgcheck = 0
 
 [rhel-7-server-extras-rpms]
 metadata_expire = 86400
-baseurl = http://10.19.115.172/pub/rhel-7-server-extras-rpms
+baseurl = http://192.168.122.250/pub/rhel-7-server-extras-rpms
 name = rhel-7-server-extras-rpms
 enabled = 1
 gpgcheck = 0
