@@ -30,7 +30,6 @@ EOF
 )
 
 files=(
-./vagrantcdk/custom.repo
 ./labs/lab1/custom.repo
 ./labs/lab1/registry/custom.repo
 ./labs/lab2/bigapp/custom.repo
