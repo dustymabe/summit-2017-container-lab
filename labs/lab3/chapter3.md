@@ -4,7 +4,7 @@ In this lab you will deconstruct an application into microservices, creating
 a multi-container application. In this process we explore the challenges of 
 networking, storage and configuration.
 
-This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
+This lab should be performed on **workstation.example.com** unless otherwise instructed.
 
 Expected completion: 20-30 minutes
 
@@ -199,7 +199,7 @@ Now we are ready to build the images to test our Dockerfiles.
 
         docker images
 
-1. Configure the local directories for persistent storage. We also need to change 
+1. XXXXX local dirs don't work. skip this section. see [#24](https://github.com/dustymabe/summit-2017-container-lab/issues/24) Configure the local directories for persistent storage. We also need to change 
    the SELinux context so the applications have permission to read and write to the 
    directories.
 
@@ -219,10 +219,11 @@ Now we are ready to build the images to test our Dockerfiles.
   * `-v <host/path>:<container/path>` to bindmount the directory for persistent storage
   * `-p <host_port>:<container_port>` to map the container port to the host port
 
-            docker run -d -v /var/lib/mariadb:/var/lib/mysql -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+            DONT RUN THIS ONE FOR NOW docker run -d -v /var/lib/mariadb:/var/lib/mysql -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+            docker run -d -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
             docker logs $(docker ps -ql)
-            sudo ls -l /var/lib/mariadb
-            curl http://localhost:3306
+            DONT RUN THIS ONE FOR NOW sudo ls -l /var/lib/mariadb
+            curl http://cdk.example.com:3306
 
   **Note**: the `curl` command does not return useful information but demonstrates 
             a response on the port.
@@ -230,11 +231,12 @@ Now we are ready to build the images to test our Dockerfiles.
 1. Test the Wordpress image to confirm connectivity. Additional run options:
   * `--link <name>:<alias>` to link to the database container
 
-            docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 80:80 --link mariadb:db --name wordpress wordpress
+            DONT RUN THIS ONE FOR NOW docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 80:80 --link mariadb:db --name wordpress wordpress
+            docker run -d -p 1080:80 --link mariadb:db --name wordpress wordpress
             docker logs $(docker ps -ql)
-            sudo ls -l /var/lib/wp_uploads
+            DONT RUN THIS ONE FOR NOW sudo ls -l /var/lib/wp_uploads
             docker ps
-            curl -L http://localhost
+            curl -L http://cdk.example.com:1080
 
 You may also load the Wordpress application in a browser to test its full functionality.
 
@@ -252,7 +254,8 @@ to copy+paste from README files.
 1. Edit `wordpress/Dockerfile` and add the following instruction near the bottom 
    of the file above the CMD line.
 
-        LABEL RUN docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 80:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
+        NOT THIS ONE FOR NOW LABEL RUN docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 80:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
+        LABEL RUN docker run -d -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
 
 1. Rebuild the Wordpress image. The image cache will be used so only the changes 
    will need to be built.
@@ -264,21 +267,21 @@ to copy+paste from README files.
 
         docker stop wordpress
         docker rm wordpress
-        sudo atomic run wordpress
-        curl -L http://localhost
+        atomic run wordpress
+        curl -L http://cdk.example.com:1080
 
 1. Once satisfied with the images tag them with the URI of the local lab local registry. 
    The tag is what Docker uses to identify the particular image that we want to upload to
    a registry.
 
-        docker tag mariadb rhel-cdk.example.com:5000/mariadb
-        docker tag wordpress rhel-cdk.example.com:5000/wordpress
+        docker tag mariadb cdk.example.com:5000/mariadb
+        docker tag wordpress cdk.example.com:5000/wordpress
         docker images
 
 1. Push the images
 
-        docker push rhel-cdk.example.com:5000/mariadb
-        docker push rhel-cdk.example.com:5000/wordpress
+        docker push cdk.example.com:5000/mariadb
+        docker push cdk.example.com:5000/wordpress
 
 ## Clean Up
 
@@ -302,5 +305,6 @@ This command is useful in freeing up disk space by removing all stopped containe
 docker rm $(docker ps -qa)
 ```
 
-This command will result in a cosmetic error because it is trying to stop a running 
-container - the registry.  This can safely be ignored.
+This command will result in a cosmetic error because it is trying to stop running 
+containers like the registry and the OpenShift containers that are running. These
+errors can safely be ignored.

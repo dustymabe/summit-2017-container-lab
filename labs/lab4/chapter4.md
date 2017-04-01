@@ -3,7 +3,7 @@
 In this lab we introduce how to orchestrate a multi-container application in 
 OpenShift.
 
-This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
+This lab should be performed on **workstation.example.com** unless otherwise instructed.
 
 Expected completion: 40-60 minutes
 
@@ -15,11 +15,11 @@ So, let's see what will happen. Launch the site:
 
 ```bash
 docker run -d -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
-docker run -d -p 80:80 --link mariadb:db --name wordpress wordpress
+docker run -d -p 1080:80 --link mariadb:db --name wordpress wordpress
 ```
 
 Take a look at the site in your web browser on your machine using 
-[http://rhel-cdk.example.com](http://rhel-cdk.example.com). As you learned 
+[http://cdk.example.com](http://cdk.example.com). As you learned 
 before, you can confirm the port that your server is running on by
 executing:
 
@@ -37,7 +37,7 @@ ip addr show dev eth1
 ```
 
 However, we have some nice DNS set up and chose port 80, so you 
-can just use [http://rhel-cdk.example.com](http://rhel-cdk.example.com).
+can just use [http://cdk.example.com](http://cdk.example.com).
 
 Now, let's see what happens when we kick over the database. However,
 for a later experiment, let's grab the container-id right before you do it. 
@@ -52,7 +52,7 @@ imagine, explosions! (*making sound effects will be much appreciated
 by your lab mates.*)
 
 ```bash
-web browser -> http://rhel-cdk.example.com OR curl -L http://rhel-cdk.example.com
+web browser -> http://cdk.example.com OR curl -L http://cdk.example.com
 ```
 
 Now, what is neat about a container system, assuming your web application
@@ -74,7 +74,7 @@ about what you would expect for a web server and a database running on
 VMs, but a whole lot faster. Let's take a look at the site now.
 
 ```bash
-web browser -> http://rhel-cdk.example.com OR curl -L http://rhel-cdk.example.com
+web browser -> http://cdk.example.com OR curl -L http://cdk.example.com
 ```
 
 And.. Your site is back! Fortunately wordpress seems to be designed
@@ -92,7 +92,9 @@ Starting and stopping is definitely easy, and fast. However, it is still pretty 
 What if we could automate the recovery? Or, in buzzword terms, "ensure the service 
 remains available"? Enter Kubernetes/OpenShift.
 
-## Starting OpenShift on the CDK
+## XXX maybe this should be a "starting Atomic Host section" Starting OpenShift on the CDK
+
+ignore this section for now, just ```oc new-project devel```. 
 
 The Vagrantfile we used to bring up the CDK in lab1 does not start
 OpenShift by default. We chose to do this so that we could play around
@@ -171,7 +173,7 @@ To start, we will add the most basic information. Please replace the
 ```
   containers:
     - name: mariadb
-      image: rhel-cdk.example.com:5000/mariadb
+      image: cdk.example.com:5000/mariadb
       ports:
         - containerPort: 3306
       env:
@@ -206,7 +208,7 @@ metadata:
 spec:
   containers:
     - name: mariadb
-      image: rhel-cdk.example.com:5000/mariadb
+      image: cdk.example.com:5000/mariadb
       ports:
         - containerPort: 3306
       env:
@@ -235,7 +237,7 @@ metadata:
 spec:
   containers:
   - name: wordpress
-    image: rhel-cdk.example.com:5000/wordpress
+    image: cdk.example.com:5000/wordpress
     ports:
       - containerPort: 80
     env:
@@ -416,13 +418,13 @@ And you should be able to see the service's accessible URL by viewing the routes
 ```bash
 $ oc get routes
 NAME        HOST/PORT                                           PATH      SERVICE     LABELS           INSECURE POLICY   TLS TERMINATION
-wordpress   wordpress-sample-project.rhel-cdk.10.1.2.2.xip.io             wordpress   name=wordpress
+wordpress   wordpress-devel.cdk.example.com                     wordpress   name=wordpress
 ```
 
 Check and make sure you can access the wordpress service through the route:
 
 ```bash
-curl -L http://wordpress-sample-project.rhel-cdk.10.1.2.2.xip.io
+curl -L wordpress-devel.cdk.example.com
 or
 point your browser to the URL to view the GUI
 ```
@@ -440,7 +442,7 @@ First, let's log in to the remote cluster:
 
 ```bash
 oc login --insecure-skip-tls-verify=true \
-    -u openshift-dev -p devel https://deploy.example.com:8443
+    -u developer -p developer atomic-host.example.com:8443
 ```
 
 This will create a new configuration file in ~/.kube/config. This
@@ -487,13 +489,13 @@ oc expose svc/wordpress
 ```bash
 $ oc get routes
 NAME        HOST/PORT                                                 PATH      SERVICE     LABELS           INSECURE POLICY   TLS TERMINATION
-wordpress   wordpress-production.deploy.example.com.10.1.2.3.xip.io             wordpress   name=wordpress 
+wordpress   wordpress-production.atomic-host.example.com            wordpress   name=wordpress 
 ```
 
 And finally, access the site via the link:
 
 ```
-curl -L http://wordpress-production.deploy.example.com.10.1.2.3.xip.io
+curl -L http://wordpress-production.atomic-host.example.com
 or
 point your browser to the URL
 ```

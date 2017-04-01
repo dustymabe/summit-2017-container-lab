@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: mariadb
-      image: rhel-cdk.example.com:5000/mariadb
+      image: cdk.example.com:5000/mariadb
       ports:
         - containerPort: 3306
       env:
