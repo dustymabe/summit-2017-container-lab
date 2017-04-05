@@ -8,15 +8,11 @@ itself as well as walk through some exercises with a couple of Docker images
 / containers to tell a complete story and point out some things that you might 
 have to consider when containerizing your application.
 
-This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
+This lab should be performed on **workstation.example.com** unless otherwise instructed.
 
-The **rhel-cdk.example.com** machine should have been brought up in
-lab0. You can access that machine using the following commands:
-
-```
-cd ~/summit-2017-container-lab/vagrantcdklab
-vagrant ssh
-```
+The **cdk.example.com** running minishift should have been brought up in lab0. 
+You can access that machine using the ```oc``` and ```docker``` commands as shown
+in lab0.
 
 Expected completion: 15-20 minutes
 
@@ -158,7 +154,7 @@ docker build -t redhat/apache .
 Next, let's run the image and make sure it started.
 
 ```bash
-docker run -dt -p 80:80 --name apache redhat/apache
+docker run -dt -p 1080:80 --name apache redhat/apache
 docker ps
 ```
 
@@ -174,7 +170,7 @@ the container. Finally, we passed in the name of the image that we built earlier
 Okay, let's make sure we can access the web server.
 
 ```bash
-curl http://localhost
+curl http://cdk.example.com:1080
 Apache
 ```
 

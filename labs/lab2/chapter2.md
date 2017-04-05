@@ -11,7 +11,8 @@ of multiple services. We will also observe several bad practices when
 composing Dockerfiles and explore how to avoid those mistakes. In lab 3
 we will decompose the application into more manageable pieces.
 
-This lab should be performed on **rhel-cdk.example.com** unless otherwise instructed.
+This lab should be performed on **workstation.example.com** unless 
+otherwise instructed.
 
 Expected completion: 20-25 minutes
 
@@ -59,7 +60,7 @@ To run the docker container based on the image we just built use the
 following command:
 
 ```bash
-docker run -p 80 --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
+docker run -p 1080 --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
 docker ps
 ```
 
@@ -113,10 +114,10 @@ port 80:
 docker port bigapp 80
 ```
 
-Now connect to the port via the web browser on your machine using ```http://rhel-cdk.example.com:<port>```.  You can also use curl to connect, for example:
+Now connect to the port via the web browser on your machine using ```http://cdk.example.com:<port>```.  You can also use curl to connect, for example:
 
 ```bash
-curl -L http://rhel-cdk.example.com:<port>
+curl -L http://cdk.example.com:<port>
 ```
 
 ## Review Dockerfile practices
