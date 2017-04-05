@@ -198,19 +198,12 @@ You can see the IP address that was assinged to the container.
 We can apply the same filter to any value in the json output. Try a few 
 different ones.
 
-Now lets look inside the container and see what that environment looks like. We
-first need to get the PID of the container so we can attach to the PID namespace 
-with nsenter. After we have the PID, go ahead and enter the namespaces of the 
-container substituting the PID on your container for the one listed below. Take
-a look at the man page to understand all the flags we are passing to nsenter.
+Now lets look inside the container and see what that environment looks like. Execute commands in the namespace with `docker exec`.
+
 
 ```bash
-docker inspect --format '{{ .State.Pid }}' apache
-<PID> (e.g. 15492)
-
-man nsenter
-sudo nsenter -m -u -n -i -p -t <PID>
-
+docker exec <container-name OR container-id> <cmd>
+docker exec -it apache bash
 ```
 
 Now run some commands and explore the environment. Remember, we are in a slimmed
@@ -233,13 +226,6 @@ ip addr
 
 Exit the container namespace with `CTRL+d` or `exit`.
 
-In addition to using `nsenter` to enter the namespace of your container, you 
-can also execute commands in that namespace with `docker exec`.
-
-```bash
-docker exec <container-name OR container-id> <cmd>
-docker exec apache pwd
-```
 
 Whew, so we do have some options. Now, remember that this lab is all about 
 containerizing your existing apps. You will need some of the tools listed 
