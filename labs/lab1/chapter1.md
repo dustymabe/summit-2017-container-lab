@@ -27,7 +27,7 @@ Agenda:
 * Build Docker registry
 
 
-##Docker and systemd
+## Docker and systemd
 
 Check out the systemd unit file that starts Docker on the CDK and notice that 
 it includes 3 EnvironmentFiles. These files tell Docker how the Docker daemon, 
@@ -53,7 +53,7 @@ It should have been brought up automatically for us by the CDK.
 sudo systemctl status docker
 ```
 
-##Docker Help
+## Docker Help
 
 Now that we see how the Docker startup process works, we should make sure we 
 know how to get help when we need it.  Run the following commands to get familiar 
@@ -93,7 +93,7 @@ without having to wait for the container images to download.
 docker images
 ```
 
-##Let's explore a Dockerfile
+## Let's explore a Dockerfile
 
 Here we are just going to explore a simple Dockerfile. The purpose for this is 
 to have a look at some of the basic commands that are used to construct a Docker 
@@ -160,7 +160,7 @@ docker ps
 
 Here we are using a few switches to configure the running container the way we 
 want it. We are running a `-dt` to run in detached mode with a psuedo TTY. Next
-we are mapping a port from the host to the contianer. We are being explicit here.
+we are mapping a port from the host to the container. We are being explicit here.
 We are telling Docker to map port 80 on the host to port 80 in the container. 
 Now, we could have let Docker handle the host side port mapping dynamically by 
 passing a `-p 80`, in which case Docker would have randomly assigned a port to 
