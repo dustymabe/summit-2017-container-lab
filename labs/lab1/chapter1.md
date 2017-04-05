@@ -46,12 +46,13 @@ cat /etc/sysconfig/docker-storage
 cat /etc/sysconfig/docker-network
 ```
 
-Now check the status of docker and make sure it is running before moving forward.
-It should have been brought up automatically for us by the CDK.
+Now check the status of Docker.
 
 ```bash
 sudo systemctl status docker
 ```
+
+NOTE: This status of `inactive` is OK. We are using the Docker instance that minishift provides.  The version of Docker on this host is only for the client components.
 
 ## Docker Help
 
