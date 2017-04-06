@@ -231,7 +231,7 @@ Now we are ready to build the images to test our Dockerfiles.
 1. Test the Wordpress image to confirm connectivity. Additional run options:
   * `--link <name>:<alias>` to link to the database container
 
-            DONT RUN THIS ONE FOR NOW docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 80:80 --link mariadb:db --name wordpress wordpress
+            DONT RUN THIS ONE FOR NOW docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 1080:80 --link mariadb:db --name wordpress wordpress
             docker run -d -p 1080:80 --link mariadb:db --name wordpress wordpress
             docker logs $(docker ps -ql)
             DONT RUN THIS ONE FOR NOW sudo ls -l /var/lib/wp_uploads
@@ -245,7 +245,7 @@ You may also load the Wordpress application in a browser to test its full functi
 When we have a working `docker run` recipe we want a way to communicate that 
 to the end-user. The `atomic` tool is installed on both RHEL and Atomic hosts.
 It is useful in controlling the Atomic host as well as running containers. It
-is able to parse the `LABEL` instruction in a `Dockerfile`. The `LABEL RUN` 
+is able to parse the `LABEL` instruction in a `Dockerfile`. The `LABEL run` 
 instruction prescribes how the image is to be run. In addition to providing
 informative human-readable metadata, `LABEL`s may be used by the `atomic` 
 CLI to run an image the way a developer designed it to run. This avoids having 
@@ -254,8 +254,8 @@ to copy+paste from README files.
 1. Edit `wordpress/Dockerfile` and add the following instruction near the bottom 
    of the file above the CMD line.
 
-        NOT THIS ONE FOR NOW LABEL RUN docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 80:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
-        LABEL RUN docker run -d -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
+        NOT THIS ONE FOR NOW LABEL run docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
+        LABEL run docker run -d -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
 
 1. Rebuild the Wordpress image. The image cache will be used so only the changes 
    will need to be built.
