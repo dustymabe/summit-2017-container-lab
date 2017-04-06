@@ -130,7 +130,7 @@ To illustrate some problem points in our Dockerfile it has been
 replicated below with some commentary added:
 
 ```dockerfile
-FROM registry.access.redhat.com/rhel
+FROM registry.access.redhat.com/rhel7
 
 >>> No tags on image specification - updates could break things
 
