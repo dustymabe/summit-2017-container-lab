@@ -60,7 +60,7 @@ To run the docker container based on the image we just built use the
 following command:
 
 ```bash
-docker run -p 1080 --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
+docker run -p 80 --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb -d bigimg
 docker ps
 ```
 
