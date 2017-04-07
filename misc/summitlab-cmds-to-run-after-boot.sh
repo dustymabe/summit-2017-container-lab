@@ -27,6 +27,14 @@ EOF
 virsh net-start default
 virsh net-autostart default
 
+#Add alias for pulling the lab down from github
+cat <<EOF > /usr/local/bin/getlab
+#!/bin/bash
+git clone https://github.com/dustymabe/summit-2017-container-lab
+EOF
+chmod 755 /usr/local/bin/getlab
+
+
 
 curl -L http://192.168.122.1:8000/atomic.xml | virsh define /dev/stdin
 #virsh autostart atomic-host

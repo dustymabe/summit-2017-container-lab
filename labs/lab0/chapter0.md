@@ -1,23 +1,16 @@
 ## Introduction
 
 In order to make this lab simple to work with, we are going to leverage
-a tool known as the Container Development Kit (CDK). The CDK is a prebuilt 
-Vagrant VM with RHEL installed. The VM also has all the tools you need for
-building and developing software with containers. The included
-software provides docker, kubernetes and, optionally, OpenShift. 
+a product known as the Container Development Kit (CDK). The CDK leverages a tool called [minishift](https://github.com/minishift/minishift) to setup a RHEL VM with docker and OpenShift already installed. Optionally, you can register with your Red Hat Account and actually get updates to the VM as well. The CDK also includes documentation, getting started and howto guides, and a community of users to learn from.
 
-By leveraging [Vagrant](https://www.vagrantup.com/) the CDK gives us a reliable, 
-reproducible environment to iterate on. If you are unfamiliar with Vagrant, 
-that is OK, as we will cover the basics here. However, in the future, you
-should really look in to it more deeply. We are just scratching the surface
-of Vagrant's capabilities.
+The key feature of minishift is a reliable, reproducible environment to iterate on. If you are unfamiliar with minishift that is OK, as we will cover the basics here. 
 
 Unfortunately, we are just briefly discussing the CDK here. You should definitely 
 [dig in more](http://developers.redhat.com/products/cdk/) as you have time.
 The CDK is a free download for registered users, and gives you access to
-many tools in the Red Hat container ecosystem.
+many tools in the Red Hat Container Ecosystem.
 
-## Getting Vagrant and the CDK
+## Getting the CDK
 
 **NOTE** If you are attending a lab in person, you can skip this step
          and move directly to [Get Lab Materials](#get-lab-materials) as 
@@ -25,8 +18,12 @@ many tools in the Red Hat container ecosystem.
 
 In order to get the CDK, the easiest way is to head over to developers.redhat.com 
 and follow the "[install the Container Development Kit](http://developers.redhat.com/products/cdk/get-started/)" 
-instructions. The instructions cover installing Vagrant and the CDK on Windows, 
+instructions. The instructions cover installing the CDK on Windows, 
 MacOS, and Linux. 
+
+**NOTE** At the time of this writing, the CDK version we are using is CDK-3.0 
+        which is still in beta so there are no installation docs as yet. 
+        However, they should end up at the end of the URL above 
 
 ## Get Lab Materials
 
@@ -37,10 +34,11 @@ it on the Lab VM. If you are in the lab, please run the following:
 $ cd ~/
 $ /usr/local/bin/getlab 
 Cloning into 'summit-2017-container-lab'...
-remote: Counting objects: 478, done.
-remote: Total 478 (delta 0), reused 0 (delta 0), pack-reused 478
-Receiving objects: 100% (478/478), 13.66 MiB | 11.76 MiB/s, done.
-Resolving deltas: 100% (214/214), done.
+remote: Counting objects: 727, done.
+remote: Compressing objects: 100% (80/80), done.
+remote: Total 727 (delta 21), reused 0 (delta 0), pack-reused 645
+Receiving objects: 100% (727/727), 13.75 MiB | 2.08 MiB/s, done.
+Resolving deltas: 100% (320/320), done.    
 ```
 
 For those of you following along at home, just `git clone` the repo you 
@@ -51,141 +49,80 @@ $ cd ~/
 $ git clone https://github.com/dustymabe/summit-2017-container-lab
 ```
 
-## Vagrant Walkthrough
+## Minishift Walkthrough
 
-First off, if you are on a CentOS or RHEL host, enable the Vagrant 
-Software Collection:
+Your major units of operation with minishift are `minishift start`, `minishift ssh`, 
+`minishift docker-env`, and `minishift stop`. We will walk through these. 
+Minishift has a number of other functions, some of which we will use later in the lab. However, these are the basics which warrant some examples to make sure you have enough context for the rest of the labs. We also need to get you access to the docker daemon running inside the minishift VM for the "Docker Refresh" in Lab 1.  
 
-```bash
-$ scl enable sclo-vagrant1 bash
-```
-
-Ok, so now you have Vagrant. Make sure by asking for the version (1.8.1 
-at time of writing):
-
-```bash
-$ vagrant --version
-Vagrant 1.8.1
-```
-
-Your major units of operation with Vagrant are `vagrant up`, `vagrant ssh`, 
-`vagrant halt`, and `vagrant destroy`. We will walk through these. 
-All of these operations, and almost every other Vagrant command, use a "per 
-project configuration file" called a `Vagrantfile` to define the details of 
-one or more virtual machines that you are using in your project. A detailed 
-explanation of a Vagrantfile and all the magic you can do with it is well 
-beyond the scope of this lab, but you can find out more details in the 
-[Documentation](https://www.vagrantup.com/docs/vagrantfile/).
-
-
-First, `vagrant up`: this command asks your hypervisor to launch the virtual 
-machine described in the Vagrantfile. The operation may be a "create and launch 
+First, `minishift start`: this command asks your hypervisor to launch the virtual 
+machine minishift has prepared. The operation may be a "create and launch 
 VM" or a "re-launch an existing VM" and it is largely transparent to the user. 
  
-OK, so, let's move in to a directory with a Vagrantfile and then launch the VM:
+OK, so, let's move in to our project directory and then launch minishift:
 
 ```bash
-$ cd ~/summit-2017-container-lab/vagrantcdk
-$ vagrant up
+$ cd ~/summit-2017-container-lab
+$ minishift start
 ```
 
 You should get a lot of feedback about the launch of the VM but, if you are 
 using the lab VM or have run this before, you will get a lot less. As long 
-as you don't get errors (delineated, normally, by red font) you are in good shape.
+as you don't get any errors you are in good shape.
 
-OK, so now you have a running VM. Ask vagrant to tell us the status:
+OK, so now minishift is running which means docker and OpenShift. We can now ask for the status (it's succinct!):
 
 ```bash
-$ vagrant status
-Current machine states:
-
-default                   running (libvirt)
-
-The Libvirt domain is running. To stop this machine, you can run
-`vagrant halt`. To destroy the machine, you can run `vagrant destroy`.
+$ minishift status
+Running
 ```
 
 Now we can actually step inside the machine with:
 
 ```bash
-$ vagrant ssh
-[vagrant@rhel-cdk ~]$ 
+$ minishift ssh
+Last login: Mon Feb 30 17:49:01 2017 from 192.168.??.??
+[docker@minishift ~]$ 
 ```
 
-Now take a look at `ip -4 -o addr` and see what IPs we have: 
+You should very rarely need to jump inside the VM as most of the functions of docker and OpenShift can be done remotely. However, it can be really nice to know that you don't need to figure out the IP address or the username and password in case you have to get in there when something goes wrong. That said, most of the time the right answer is to just destroy the instance and recreate it.
 
-```bash
-[vagrant@rhel-cdk ~]$ ip -4 -o addr
-1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
-2: eth0    inet 192.168.121.170/24 brd 192.168.121.255 scope global dynamic eth0\       valid_lft 3430sec preferred_lft 3430sec
-3: eth1    inet 10.1.2.2/24 brd 10.1.2.255 scope global eth1\       valid_lft forever preferred_lft forever
-4: docker0    inet 172.17.0.1/16 scope global docker0\       valid_lft forever preferred_lft forever
-```
-
-The `10.1.2.2` address is the one we set in the `Vagrantfile`. If you
-peak in the file you'll see it set at the top in a variable: 
-`PUBLIC_ADDRESS="10.1.2.2"`. We'll use the `10.1.2.2` address to
-access the CDK in the next section.
-
-Now exit out of the CDK VM by disconnecting from the SSH session:
+Now exit out of the minishift VM by disconnecting from the SSH session:
 
 ```bash
 $ exit
 ```
 
+We have two more commands worth mentioning. First off, let's mention `minishift stop`. Stop does exactly what it sounds like and shuts down minishift. However, it does not destroy anything inside just "turns the machine off." If you do want to remove the VM, you can use `minishift delete`. You can spin it right back up again, fresh, with `minishift start`. Finally, we will use `minishift docker-env` in a few minutes to connect the host to the docker daemon in the VM.
+
 ## Container Development Kit (CDK) Walkthrough
 
-The cool thing is, we actually launched the CDK VM by executing `vagrant up` on
-the Vagrantfile in the previous section. The CDK gives a couple options (through the use of 
-[different Vagrantfiles](https://developers.redhat.com/download-manager/file/cdk-2.0.0.zip)) 
-but in this case, we launched the "OpenShift in a Box" VM (aka rhel-ose in 
-the cdk.zip). The CDK provides a simple to use and launch instance of the 
+When we started minishift, we launched the software tooling component of the CDK. As we said before, the CDK provides a lot of support for containerizing your applications. However, the major software tool is minishift.
+
+However, what is minishift? Essentially, it is a simple to use and launch instance of the 
 same OpenShift PaaS you would use at work. Why is a PaaS included in a tool, 
 much less a lab, focused on Containers? Well, the latest version of OpenShift, 
 actually runs Docker Containers to host your "Platform" (in the PaaS sense) 
 and your application.
 
 If you would like to explore the OpenShift Console, you can see it running 
-in your OpenShift instance, if you open a browser. Let's go ahead and try it. 
+in your OpenShift instance, if you open a browser. However, before we do that, we need the IP address of the VM minishift created. Easy enough, just run
 
-Open Firefox from the Applications menu and navigate to 
-`https://10.1.2.2:8443/console/`. Once it loads (and you bypass the bad 
-certificate error), you can log in to the console using the default 
-`admin/admin` or to see the less privileged experience, use 
-`openshift-dev/devel` for the `username/password`.
+```bash
+$ minishift ip
+192.168.???.??? 
+```
+Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace "<ip>" with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `system/admin`.
 
 ## Setting Up For the Remaining Labs
 
-Let's wrap up the walkthroughs by getting rid of the VM we just
-started. We can do this with a `vagrant destroy` command, which will
-not only shut down a VM, but also remove it completely. Any contents
-of the VM disk images will be lost:
-
-```bash
-$ cd ~/summit-2017-container-lab/vagrantcdk
-$ vagrant destroy
-==> default: Removing domain...
-```
-
-And to set up for the next lab sections we'll go ahead and bring up
-two Vagrant VMs. One of them is still the CDK, but with a customized
-`Vagrantfile` for this lab. This box will be known as **rhel-cdk.example.com** 
-for the purposes of this lab and will have the IP address `10.1.2.2`.
-
-```bash
-$ cd ~/summit-2017-container-lab/vagrantcdklab
-$ vagrant up
-```
-
-The other one is a Red Hat Enterprise Linux Atomic Host Vagrant box, 
-that has a Vagrantfile that will set up and run OpenShift during launch.
+Let's wrap up the walkthroughs by and set up for the next lab sections we'll go ahead and bring up another VM. In this case, we are launching an instance of Red Hat Enterprise Linux Atomic Host that will set up and run OpenShift during launch.
 This box will be known as **deploy.example.com** for the purposes of
-this lab and will have the IP address `10.1.2.3`.
+this lab and will have the IP address `192.168.124.100` but you should always be able to reference it by DNS name.
 
 ```bash
-$ cd ~/summit-2017-container-lab/vagrantAtomicCluster
-$ vagrant up
+$ virsh start atomic-host
 ```
 
-After you bring up each machine you are then ready to move on to the
+After you bring up this new machine you are then ready to move on to the
 next lab.
