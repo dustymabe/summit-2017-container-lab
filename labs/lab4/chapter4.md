@@ -29,11 +29,10 @@ docker port wordpress
 ```
 
 and taking look at the "PORTS" column for the wordpress site. You 
-can also get your ip address by looking at the address for the 
-eth0 interface after you execute:
+can also get your ip address w/ the following minishift command:
 
 ```bash
-minishift ssh "ip addr show dev eth0"
+minishift ip
 ```
 
 However, we have some nice DNS set up and chose port 1080, so you 
