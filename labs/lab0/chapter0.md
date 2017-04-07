@@ -63,14 +63,14 @@ OK, so, let's move in to our project directory and then launch minishift:
 
 ```bash
 $ cd ~/summit-2017-container-lab
-$ minishift start
+$ minishift start --skip-registration
 ```
 
 You should get a lot of feedback about the launch of the VM but, if you are 
 using the lab VM or have run this before, you will get a lot less. As long 
 as you don't get any errors you are in good shape.
 
-OK, so now minishift is running which means docker and OpenShift. We can now ask for the status (it's succinct!):
+OK, so now minishift is started which means docker and OpenShift are up and running. We can now ask for the status (it's succinct!):
 
 ```bash
 $ minishift status
@@ -112,12 +112,12 @@ in your OpenShift instance, if you open a browser. However, before we do that, w
 $ minishift ip
 192.168.???.??? 
 ```
-Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace "<ip>" with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `system/admin`.
+Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace "<ip>" with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `developer/developer` username/password.
 
 ## Setting Up For the Remaining Labs
 
 Let's wrap up the walkthroughs by and set up for the next lab sections we'll go ahead and bring up another VM. In this case, we are launching an instance of Red Hat Enterprise Linux Atomic Host that will set up and run OpenShift during launch.
-This box will be known as **deploy.example.com** for the purposes of
+This box will be known as **atomic-host.example.com** for the purposes of
 this lab and will have the IP address `192.168.124.100` but you should always be able to reference it by DNS name.
 
 ```bash
