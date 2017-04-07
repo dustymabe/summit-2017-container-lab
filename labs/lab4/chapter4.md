@@ -19,7 +19,7 @@ docker run -d -p 1080:80 --link mariadb:db --name wordpress wordpress
 ```
 
 Take a look at the site in your web browser on your machine using 
-[http://cdk.example.com](http://cdk.example.com). As you learned 
+[http://cdk.example.com:1080](http://cdk.example.com:1080). As you learned 
 before, you can confirm the port that your server is running on by
 executing:
 
@@ -29,15 +29,14 @@ docker port wordpress
 ```
 
 and taking look at the "PORTS" column for the wordpress site. You 
-can also get your ip address by looking at the address for the 
-eth1 interface after you execute:
+can also get your ip address w/ the following minishift command:
 
 ```bash
-ip addr show dev eth1
+minishift ip
 ```
 
-However, we have some nice DNS set up and chose port 80, so you 
-can just use [http://cdk.example.com](http://cdk.example.com).
+However, we have some nice DNS set up and chose port 1080, so you 
+can just use [http://cdk.example.com:1080](http://cdk.example.com:1080).
 
 Now, let's see what happens when we kick over the database. However,
 for a later experiment, let's grab the container-id right before you do it. 
@@ -52,7 +51,7 @@ imagine, explosions! (*making sound effects will be much appreciated
 by your lab mates.*)
 
 ```bash
-web browser -> http://cdk.example.com OR curl -L http://cdk.example.com
+web browser -> http://cdk.example.com:1080 OR curl -L http://cdk.example.com:1080
 ```
 
 Now, what is neat about a container system, assuming your web application
@@ -74,7 +73,7 @@ about what you would expect for a web server and a database running on
 VMs, but a whole lot faster. Let's take a look at the site now.
 
 ```bash
-web browser -> http://cdk.example.com OR curl -L http://cdk.example.com
+web browser -> http://cdk.example.com:1080 OR curl -L http://cdk.example.com:1080
 ```
 
 And.. Your site is back! Fortunately wordpress seems to be designed
