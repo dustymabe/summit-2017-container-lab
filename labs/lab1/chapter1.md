@@ -38,6 +38,15 @@ settings. You may find it interesting that you can `ADD_REGISTRY` and
 
 Perform the following commands as student unless instructed otherwise.
 
+XXX we want to consider the new model of using docker from minishift
+in this section. Please run the following command to get access to the
+mihnishift docker
+
+```bash
+eval $(minishift docker-env)
+```
+
+
 ```bash
 cat /usr/lib/systemd/system/docker.service
 cat /usr/lib/systemd/system/docker-storage-setup.service
