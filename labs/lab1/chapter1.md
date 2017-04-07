@@ -36,7 +36,7 @@ files too. Specifically, in the /etc/sysconfig/docker file check out the registr
 settings. You may find it interesting that you can `ADD_REGISTRY` and 
 `BLOCK_REGISTRY`. Think about the different use cases for that.
 
-Perform the following commands as root unless instructed otherwise.
+Perform the following commands as student unless instructed otherwise.
 
 ```bash
 cat /usr/lib/systemd/system/docker.service
