@@ -199,30 +199,26 @@ Now we are ready to build the images to test our Dockerfiles.
 
         docker images
 
-1. XXXXX local dirs don't work. skip this section. see [#24](https://github.com/dustymabe/summit-2017-container-lab/issues/24) Configure the local directories for persistent storage. We also need to change 
-   the SELinux context so the applications have permission to read and write to the 
-   directories.
+1. Create the local minishift directories for persistent storage.
 
-        sudo mkdir -p /var/lib/mariadb
-        sudo mkdir -p /var/lib/wp_uploads
-        ls -lZd /var/lib/wp_uploads
-        ls -lZd /var/lib/mariadb
-        sudo chcon -Rt svirt_sandbox_file_t /var/lib/mariadb
-        sudo chcon -Rt svirt_sandbox_file_t /var/lib/wp_uploads
-        ls -lZd /var/lib/wp_uploads
-        ls -lZd /var/lib/mariadb
+        minishift ssh "sudo mkdir -p /var/lib/mariadb"
+        minishift ssh "sudo mkdir -p /var/lib/wp_uploads"
 
 1. Run the database image to confirm connectivity. It takes some time to discover
    all of the necessary `docker run` options.
 
   * `-d` to run in daemonized mode
-  * `-v <host/path>:<container/path>` to bindmount the directory for persistent storage
+  * `-v <host/path>:<container/path>:Z` to bindmount the directory for persistent storage.
+    The :Z option will label the content inside the container with the exact MCS label
+    that the container runs.
   * `-p <host_port>:<container_port>` to map the container port to the host port
 
-            DONT RUN THIS ONE FOR NOW docker run -d -v /var/lib/mariadb:/var/lib/mysql -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
-            docker run -d -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+            minishift ssh "ls -lZd /var/lib/mariadb"
+            docker run -d -v /var/lib/mariadb:/var/lib/mysql:Z -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+            # Note the difference in SELinux context after running w/ a volume & :Z.
+            minishift ssh "ls -lZd /var/lib/mariadb"
             docker logs $(docker ps -ql)
-            DONT RUN THIS ONE FOR NOW sudo ls -l /var/lib/mariadb
+            minishift ssh "ls -l /var/lib/mariadb"
             curl http://cdk.example.com:3306
 
   **Note**: the `curl` command does not return useful information but demonstrates 
@@ -231,10 +227,12 @@ Now we are ready to build the images to test our Dockerfiles.
 1. Test the Wordpress image to confirm connectivity. Additional run options:
   * `--link <name>:<alias>` to link to the database container
 
-            DONT RUN THIS ONE FOR NOW docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 1080:80 --link mariadb:db --name wordpress wordpress
-            docker run -d -p 1080:80 --link mariadb:db --name wordpress wordpress
+            minishift ssh "ls -lZd /var/lib/wp_uploads"
+            docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
+            # Note the difference in SELinux context after running w/ a volume & :Z.
+            minishift ssh "ls -lZd /var/lib/wp_uploads"
             docker logs $(docker ps -ql)
-            DONT RUN THIS ONE FOR NOW sudo ls -l /var/lib/wp_uploads
+            minishift ssh "ls -l /var/lib/wp_uploads"
             docker ps
             curl -L http://cdk.example.com:1080
 
@@ -254,9 +252,8 @@ to copy+paste from README files.
 1. Edit `wordpress/Dockerfile` and add the following instruction near the bottom 
    of the file above the CMD line.
 
-        NOT THIS ONE FOR NOW LABEL run docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/ -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
-        LABEL run docker run -d -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
-
+        LABEL run docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
+        
 1. Rebuild the Wordpress image. The image cache will be used so only the changes 
    will need to be built.
 
