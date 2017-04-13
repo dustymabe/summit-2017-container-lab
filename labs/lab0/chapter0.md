@@ -53,7 +53,7 @@ $ git clone https://github.com/dustymabe/summit-2017-container-lab
 
 Your major units of operation with minishift are `minishift start`, `minishift ssh`, 
 `minishift docker-env`, and `minishift stop`. We will walk through these. 
-Minishift has a number of other functions, some of which we will use later in the lab. However, these are the basics which warrant some examples to make sure you have enough context for the rest of the labs. We also need to get you access to the docker daemon running inside the minishift VM for the "Docker Refresh" in Lab 1.  
+Minishift has a number of other functions, some of which we will use later in the lab. However, these are the basics which warrant some examples to make sure you have enough context for the rest of the labs. We also need to get you access to the docker daemon running inside the minishift VM for the "docker Refresh" in Lab 1.  
 
 First, `minishift start`: this command asks your hypervisor to launch the virtual 
 machine minishift has prepared. The operation may be a "create and launch 
@@ -102,7 +102,7 @@ When we started minishift, we launched the software tooling component of the CDK
 However, what is minishift? Essentially, it is a simple to use and launch instance of the 
 same OpenShift PaaS you would use at work. Why is a PaaS included in a tool, 
 much less a lab, focused on Containers? Well, the latest version of OpenShift, 
-actually runs Docker Containers to host your "Platform" (in the PaaS sense) 
+actually runs docker Containers to host your "Platform" (in the PaaS sense) 
 and your application.
 
 If you would like to explore the OpenShift Console, you can see it running 
