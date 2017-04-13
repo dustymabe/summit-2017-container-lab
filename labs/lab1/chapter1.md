@@ -1,4 +1,4 @@
-# LAB 1: docker refresh
+# LAB 1: docker Refresh
 
 In this lab we will explore the docker environment within the CDK. If you are familiar with 
 docker this may function as a brief refresher. If you are new to docker this 
@@ -53,7 +53,7 @@ Now check the status of docker within minishift.
 systemctl status docker
 ```
 
-## docker help
+## docker Help
 
 Now that we see how the docker startup process works, we should make sure we 
 know how to get help when we need it.  Run the following commands to get familiar 
