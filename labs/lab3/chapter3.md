@@ -89,8 +89,8 @@ contents and checkout the startup scripts.
 ```bash
 mkdir ~/workspace
 cd ~/workspace
-cp -R ~/labs/lab3/mariadb .
-cp -R ~/labs/lab3/wordpress .
+cp -R ~/summit-2017-container-lab/labs/lab3/mariadb .
+cp -R ~/summit-2017-container-lab/labs/lab3/wordpress .
 ls -lR mariadb
 ls -lR wordpress
 ```
@@ -162,7 +162,7 @@ Now we'll create the Wordpress Dockerfile.
         ADD scripts /scripts
         RUN chmod 755 /scripts/*
 
-1. Add the Wordpress source from gzip tar file. Docker will extract the files.
+1. Add the Wordpress source from gzip tar file. docker will extract the files.
 
         COPY latest.tar.gz /latest.tar.gz
         RUN tar xvzf /latest.tar.gz -C /var/www/html --strip-components=1
@@ -201,8 +201,7 @@ Now we are ready to build the images to test our Dockerfiles.
 
 1. Create the local minishift directories for persistent storage.
 
-        minishift ssh "sudo mkdir -p /var/lib/mariadb"
-        minishift ssh "sudo mkdir -p /var/lib/wp_uploads"
+        minishift ssh "sudo mkdir -p /var/lib/mariadb /var/lib/wp_uploads"
 
 1. Run the database image to confirm connectivity. It takes some time to discover
    all of the necessary `docker run` options.
@@ -268,7 +267,7 @@ to copy+paste from README files.
         curl -L http://cdk.example.com:1080
 
 1. Once satisfied with the images tag them with the URI of the local lab local registry. 
-   The tag is what Docker uses to identify the particular image that we want to upload to
+   The tag is what docker uses to identify the particular image that we want to upload to
    a registry.
 
         docker tag mariadb cdk.example.com:5000/mariadb
@@ -306,4 +305,4 @@ This command will result in a cosmetic error because it is trying to stop runnin
 containers like the registry and the OpenShift containers that are running. These
 errors can safely be ignored.
 
-In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab4/chapter4.md) we introduce container orchestration via OpenShift.
+In the [next lab](../lab4/chapter4.md) we introduce container orchestration via OpenShift.
