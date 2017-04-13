@@ -1,10 +1,10 @@
-# LAB 1: Docker refresh
+# LAB 1: docker refresh
 
 In this lab we will explore the docker environment within the CDK. If you are familiar with 
 docker this may function as a brief refresher. If you are new to docker this 
 will serve as an introduction to docker basics. Don't worry, we will progress
 rapidly. To get through this lab, we are going to focus on the environment 
-itself as well as walk through some exercises with a couple of Docker images 
+itself as well as walk through some exercises with a couple of docker images 
 / containers to tell a complete story and point out some things that you might 
 have to consider when containerizing your application.
 
@@ -18,36 +18,28 @@ Expected completion: 15-20 minutes
 
 Agenda:
 
-* Review Docker and systemd
-* Review Docker help
+* Review docker and systemd
+* Review docker help
 * Explore a Dockerfile
 * Build an image
 * Launch a container
 * Inspect a container
-* Build Docker registry
+* Build docker registry
 
 
-## Docker and systemd
+Perform the following commands as student unless instructed otherwise.
 
-Check out the systemd unit file that starts Docker on the CDK and notice that 
-it includes 3 EnvironmentFiles. These files tell Docker how the Docker daemon, 
+## docker and systemd
+
+Check out the systemd unit file that starts docker on the CDK and notice that 
+it includes 3 EnvironmentFiles. These files tell docker how the docker daemon, 
 storage and networking should be set up and configured. Take a look at those 
 files too. Specifically, in the /etc/sysconfig/docker file check out the registry 
 settings. You may find it interesting that you can `ADD_REGISTRY` and 
 `BLOCK_REGISTRY`. Think about the different use cases for that.
 
-Perform the following commands as student unless instructed otherwise.
-
-XXX we want to consider the new model of using docker from minishift
-in this section. Please run the following command to get access to the
-mihnishift docker
-
 ```bash
-eval $(minishift docker-env)
-```
-
-
-```bash
+minishift ssh
 cat /usr/lib/systemd/system/docker.service
 cat /usr/lib/systemd/system/docker-storage-setup.service
 cat /etc/sysconfig/docker
@@ -55,21 +47,18 @@ cat /etc/sysconfig/docker-storage
 cat /etc/sysconfig/docker-network
 ```
 
-Now check the status of Docker.
+Now check the status of docker within minishift.
 
 ```bash
-sudo systemctl status docker
+systemctl status docker
 ```
 
-NOTE: This status of `inactive` is OK. We are using the Docker instance that minishift provides.  The version of Docker on this host is only for the client components.
+## docker help
 
-## Docker Help
-
-Now that we see how the Docker startup process works, we should make sure we 
+Now that we see how the docker startup process works, we should make sure we 
 know how to get help when we need it.  Run the following commands to get familiar 
-with what is included in the Docker package as well as what is provided in the man 
-pages. Spend some time exploring here. When you run `docker info` 
-check out the storage configuration. The CDK automatically sets up storage 
+with what is included in the docker package as well as what is provided in the man 
+pages. Spend some time exploring here. The CDK automatically sets up storage 
 for us by creating an LVM thin pool for use as a device mapper direct docker 
 storage backend.
 
@@ -90,12 +79,25 @@ Check out the documentation that is provided:
 
 ```bash
 rpm -qd docker
+```
+
+Now exit out of the minishift VM by disconnecting from the SSH session:
+
+```bash
+exit
+```
+
+Please run the following command to get access to the minishift docker. When you run
+`docker info` check out the storage configuration. 
+
+```bash
+eval $(minishift docker-env)
 docker --help
 docker run --help
 docker info
 ```
 
-Take a look at the Docker images on the system. You should see some 
+Take a look at the docker images on the system. You should see some 
 Openshift images that are cached in the CDK so you can start OpenShift 
 without having to wait for the container images to download.
   
@@ -106,14 +108,14 @@ docker images
 ## Let's explore a Dockerfile
 
 Here we are just going to explore a simple Dockerfile. The purpose for this is 
-to have a look at some of the basic commands that are used to construct a Docker 
+to have a look at some of the basic commands that are used to construct a docker 
 image. For this lab, we will explore a basic Apache Dockerfile and then confirm 
 functionality.
 
 As the vagrant user, change directory to `~/labs/lab1/` and `cat` out the Dockerfile
 
 ```bash
-cd ~/labs/lab1
+cd ~/summit-2017-container-lab/labs/lab1
 cat Dockerfile
 ```
 ```dockerfile
@@ -128,11 +130,11 @@ RUN echo 'PS1="[apache]#  "' > /etc/profile.d/ps1.sh
 
 EXPOSE 80
 
-### Simple startup script to avoid some issues observed with container restart
+# Simple startup script to avoid some issues observed with container restart 
 ADD run-apache.sh /run-apache.sh
 RUN chmod -v +x /run-apache.sh
 
-CMD ["/run-apache.sh"]
+CMD [ "/run-apache.sh" ]
 ```
 
 Here you can see in the `FROM` command that we are pulling a RHEL 7 base image 
@@ -171,9 +173,9 @@ docker ps
 Here we are using a few switches to configure the running container the way we 
 want it. We are running a `-dt` to run in detached mode with a psuedo TTY. Next
 we are mapping a port from the host to the container. We are being explicit here.
-We are telling Docker to map port 80 on the host to port 80 in the container. 
-Now, we could have let Docker handle the host side port mapping dynamically by 
-passing a `-p 80`, in which case Docker would have randomly assigned a port to 
+We are telling docker to map port 80 on the host to port 80 in the container. 
+Now, we could have let docker handle the host side port mapping dynamically by 
+passing a `-p 80`, in which case docker would have randomly assigned a port to 
 the container. Finally, we passed in the name of the image that we built earlier.
 
 
@@ -273,4 +275,4 @@ Confirm the registry is running.
 
 ```docker ps```
 
-In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab2/chapter2.md) we will be pushing our work to this registry.
+In the [next lab](../lab2/chapter2.md) we will be pushing our work to this registry.
