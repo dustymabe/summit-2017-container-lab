@@ -106,8 +106,6 @@ You are now logged in to OpenShift and are using the ```devel```
 project. You can also view the OpenShift web console by using the same 
 credentials to log in to ```https://cdk.example.com:8443``` using firefox.
 
-##### oc get scc --as=system:admin
-
 ## Pod Creation
 
 Let's get started by talking about a pod. A pod is a set of containers that provide 
