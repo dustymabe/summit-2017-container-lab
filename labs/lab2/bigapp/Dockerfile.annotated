@@ -19,7 +19,7 @@ RUN yum -y update
 >>> cache in our intermediate cached image layer
 
 # Common Deps
-RUN yum -y install openssl procps-ng
+RUN yum -y install openssl
 RUN yum -y install psmisc 
 
 # Deps for wordpress
