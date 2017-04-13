@@ -201,4 +201,4 @@ More generally:
 * Avoid running application as root user.
 * Use `VOLUME` instruction to create a host mount point for persistent storage.
 
-In the next lab we will fix these issues and break the application up into separate services.
+In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab3/chapter3.md) we will fix these issues and break the application up into separate services.

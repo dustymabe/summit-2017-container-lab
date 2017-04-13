@@ -273,4 +273,4 @@ Confirm the registry is running.
 
 ```docker ps```
 
-In the next lab we will be pushing our work to this registry.
+In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab2/chapter2.md) we will be pushing our work to this registry.
