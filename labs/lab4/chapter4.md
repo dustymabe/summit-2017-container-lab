@@ -261,10 +261,12 @@ Which should output two pods, one called ```mariadb``` and one called
 already have it pulled up and verify the pods show up there as well.
 
 If you have any issues with the pods transistioning from a "Pending"
-state, you can check out the logs from the OpenShift containers.
+state, you can check out the logs from the OpenShift containers in multiple ways.
+Here are a couple of options:
 
 ```bash
-minishift ssh "sudo journalctl -fl -u docker"
+$ oc logs wordpress
+$ oc describe pod wordpress
 ```
 
 Ok, now let's kill them off so we can introduce the services that will
