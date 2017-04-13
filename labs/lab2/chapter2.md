@@ -40,7 +40,7 @@ are startup configuration scripts that are executed each time a
 container is started from the image. These scripts configure the
 services and then start them in the running container.
 
-## Building the docker image
+## Building the docker Image
 
 To build the docker image for this lab please execute the following
 commands:
@@ -54,7 +54,7 @@ This can take a while to build. While you wait you may want to peek at
 the [Review Dockerfile Practices](#review-dockerfile-practices) section 
 at the end of this lab chapter.
 
-## Run Container Based on docker image
+## Run Container Based on docker Image
 
 To run the docker container based on the image we just built use the
 following command:
