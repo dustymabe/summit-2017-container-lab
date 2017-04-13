@@ -40,13 +40,13 @@ are startup configuration scripts that are executed each time a
 container is started from the image. These scripts configure the
 services and then start them in the running container.
 
-## Building the Docker Image
+## Building the docker image
 
 To build the docker image for this lab please execute the following
 commands:
 
 ```bash
-cd ~/labs/lab2/bigapp/
+cd ~/summit-2017-container-lab/labs/lab2/bigapp/
 docker build -t bigimg .
 ```
 
@@ -54,7 +54,7 @@ This can take a while to build. While you wait you may want to peek at
 the [Review Dockerfile Practices](#review-dockerfile-practices) section 
 at the end of this lab chapter.
 
-## Run Container Based on Docker Image
+## Run Container Based on docker image
 
 To run the docker container based on the image we just built use the
 following command:
@@ -64,7 +64,7 @@ docker run -p 80 --name=bigapp -e DBUSER=user -e DBPASS=mypassword -e DBNAME=myd
 docker ps
 ```
 
-Take a look at some of the arguments we are passing to Docker.  We are telling Docker that the image will be listening on port 80 inside the container and to randomly assign a port on the host that maps to port 80 in the container.  Next we are providing a ```name``` of ```bigapp```.  After that we are setting some environment variables that will be passed into the container and consumed by the configuration scripts to set up the container.  Finally, we pass it the name of the image that we built in the prior step.
+Take a look at some of the arguments we are passing to docker.  We are telling docker that the image will be listening on port 80 inside the container and to randomly assign a port on the host that maps to port 80 in the container.  Next we are providing a ```name``` of ```bigapp```.  After that we are setting some environment variables that will be passed into the container and consumed by the configuration scripts to set up the container.  Finally, we pass it the name of the image that we built in the prior step.
 
 ## Exploring the Running Container
 
@@ -153,7 +153,7 @@ RUN yum -y update
 >>> cache in our intermediate cached image layer
 
 # Common Deps
-RUN yum -y install openssl procps-ng
+RUN yum -y install openssl
 RUN yum -y install psmisc 
 
 # Deps for wordpress
@@ -198,7 +198,7 @@ More generally:
 * Place rarely changing statements towards the top of the file. This allows the re-use of cached image layers when rebuilding.
 * Group statements into multi-line statements. This avoids layers that have files needed only for build.
 * Use `LABEL RUN` instruction to prescribe how the image is to be run.
-* Avoid running application as root user.
+* Avoid running application as root user where possible.
 * Use `VOLUME` instruction to create a host mount point for persistent storage.
 
-In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab3/chapter3.md) we will fix these issues and break the application up into separate services.
+In the [next lab](../lab3/chapter3.md) we will fix these issues and break the application up into separate services.
