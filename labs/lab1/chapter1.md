@@ -1,6 +1,6 @@
 # LAB 1: docker refresh
 
-In this lab we will explore the docker environment within Minishift. If you are familiar with 
+In this lab we will explore the docker environment within the CDK. If you are familiar with 
 docker this may function as a brief refresher. If you are new to docker this 
 will serve as an introduction to docker basics. Don't worry, we will progress
 rapidly. To get through this lab, we are going to focus on the environment 
@@ -31,7 +31,7 @@ Perform the following commands as student unless instructed otherwise.
 
 ## docker and systemd
 
-Check out the systemd unit file that starts docker on Minishift and notice that 
+Check out the systemd unit file that starts docker on the CDK and notice that 
 it includes 3 EnvironmentFiles. These files tell docker how the docker daemon, 
 storage and networking should be set up and configured. Take a look at those 
 files too. Specifically, in the /etc/sysconfig/docker file check out the registry 
@@ -39,23 +39,18 @@ settings. You may find it interesting that you can `ADD_REGISTRY` and
 `BLOCK_REGISTRY`. Think about the different use cases for that.
 
 ```bash
-minishift ssh "cat /usr/lib/systemd/system/docker.service"
-minishift ssh "cat /usr/lib/systemd/system/docker-storage-setup.service"
-minishift ssh "cat /etc/sysconfig/docker"
-minishift ssh "cat /etc/sysconfig/docker-storage"
-minishift ssh "cat /etc/sysconfig/docker-network"
+minishift ssh
+cat /usr/lib/systemd/system/docker.service
+cat /usr/lib/systemd/system/docker-storage-setup.service
+cat /etc/sysconfig/docker
+cat /etc/sysconfig/docker-storage
+cat /etc/sysconfig/docker-network
 ```
 
 Now check the status of docker within minishift.
 
 ```bash
-minishift ssh "systemctl status docker"
-```
-
-Please run the following command to get access to the minishift docker.
-
-```bash
-eval $(minishift docker-env)
+systemctl status docker
 ```
 
 ## docker help
@@ -63,8 +58,7 @@ eval $(minishift docker-env)
 Now that we see how the docker startup process works, we should make sure we 
 know how to get help when we need it.  Run the following commands to get familiar 
 with what is included in the docker package as well as what is provided in the man 
-pages. Spend some time exploring here. When you run `docker info` 
-check out the storage configuration. Minishift automatically sets up storage 
+pages. Spend some time exploring here. The CDK automatically sets up storage 
 for us by creating an LVM thin pool for use as a device mapper direct docker 
 storage backend.
 
@@ -72,26 +66,39 @@ storage backend.
 Check out the executables provided:
 
 ```bash
-minishift ssh "rpm -ql docker | grep bin"
+rpm -ql docker | grep bin
 ```
 
 Check out the configuration files that are provided:
 
 ```bash
-minishift ssh "rpm -qc docker"
+rpm -qc docker
 ```
 
 Check out the documentation that is provided:
 
 ```bash
-minishift ssh "rpm -qd docker"
+rpm -qd docker
+```
+
+Now exit out of the minishift VM by disconnecting from the SSH session:
+
+```bash
+exit
+```
+
+Please run the following command to get access to the minishift docker. When you run
+`docker info` check out the storage configuration. 
+
+```bash
+eval $(minishift docker-env)
 docker --help
 docker run --help
 docker info
 ```
 
 Take a look at the docker images on the system. You should see some 
-Openshift images that are cached in Minishift so you can start OpenShift 
+Openshift images that are cached in the CDK so you can start OpenShift 
 without having to wait for the container images to download.
   
 ```bash
@@ -134,7 +141,7 @@ Here you can see in the `FROM` command that we are pulling a RHEL 7 base image
 that we are going to build on. We are also adding a custom yum repo file. In disconnected 
 lab environments this file will be used to reference a local yum repository.
 In non-disconnected environments you will get access to content by
-registering the system. Registration is done for you in Minishift on bringup via
+registering the system. Registration is done for you in the CDK on bringup via
 Vagrant. Containers that are being built inherit the subscriptions of
 the host they are running on, so you only need to register the host
 system.
@@ -268,4 +275,4 @@ Confirm the registry is running.
 
 ```docker ps```
 
-In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab2/chapter2.md) we will be pushing our work to this registry.
+In the [next lab](../lab2/chapter2.md) we will be pushing our work to this registry.
