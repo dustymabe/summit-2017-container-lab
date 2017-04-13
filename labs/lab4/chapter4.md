@@ -91,39 +91,20 @@ Starting and stopping is definitely easy, and fast. However, it is still pretty 
 What if we could automate the recovery? Or, in buzzword terms, "ensure the service 
 remains available"? Enter Kubernetes/OpenShift.
 
-## XXX maybe this should be a "starting Atomic Host section" Starting OpenShift on the CDK
+## Using OpenShift in the CDK
 
-ignore this section for now, just ```oc new-project devel```. 
-
-The Vagrantfile we used to bring up the CDK in lab1 does not start
-OpenShift by default. We chose to do this so that we could play around
-with docker first without having OpenShift running. Let's start
-OpenShift now.
-
+Now login to our local OpenShift & create a new project:
 ```bash
-sudo systemctl start openshift
+$ oc login -u developer -p developer
+Using project "myproject".
+
+$ oc new-project devel
+Now using project "devel" on server "https://192.168.xx.xxx:8443".
 ```
 
-To check if OpenShift is running execute:
-
-```bash
-sudo systemctl status openshift
-docker ps --filter name=openshift
-```
-
-Now log in to OpenShift with username ```openshift-dev``` and password
- ```devel``` :
-
-```bash
-$ oc login -u openshift-dev -p devel
-Login successful.
-
-Using project "sample-project".
-```
-
-You are now logged in to OpenShift and are using the ```sample-project``` 
+You are now logged in to OpenShift and are using the ```devel``` 
 project. You can also view the OpenShift web console by using the same 
-credentials to log in to ```https://10.1.2.2:8443``` using firefox.
+credentials to log in to ```https://cdk.example.com:8443``` using firefox.
 
 ## Pod Creation
 
@@ -280,10 +261,15 @@ Which should output two pods, one called ```mariadb``` and one called
 already have it pulled up and verify the pods show up there as well.
 
 If you have any issues with the pods transistioning from a "Pending"
-state, you can check out the logs from the OpenShift service.
+state, you can check out the logs from the OpenShift containers in multiple ways.
+Here are a couple of options:
 
 ```bash
-sudo journalctl -fl -u openshift
+$ oc logs mariadb
+$ oc describe pod mariadb
+
+$ oc logs wordpress
+$ oc describe pod wordpress
 ```
 
 Ok, now let's kill them off so we can introduce the services that will
@@ -401,9 +387,9 @@ wordpress   1/1       Running   0          42s
 
 ```bash
 $ oc get services
-NAME        CLUSTER_IP      EXTERNAL_IP   PORT(S)    SELECTOR         AGE
-mariadb     172.30.25.181   <none>        3306/TCP   name=mariadb     1m
-wordpress   172.30.206.74   <none>        80/TCP     name=wordpress   1m
+NAME        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+mariadb     172.30.229.10   <none>        3306/TCP   1m
+wordpress   172.30.237.62   <none>        80/TCP     1m
 ```
 
 Now let's expose the wordpress service by creating a route
@@ -416,8 +402,8 @@ And you should be able to see the service's accessible URL by viewing the routes
 
 ```bash
 $ oc get routes
-NAME        HOST/PORT                                           PATH      SERVICE     LABELS           INSECURE POLICY   TLS TERMINATION
-wordpress   wordpress-devel.cdk.example.com                     wordpress   name=wordpress
+NAME        HOST/PORT                         PATH      SERVICES    PORT      TERMINATION
+wordpress   wordpress-devel.cdk.example.com             wordpress   80        
 ```
 
 Check and make sure you can access the wordpress service through the route:
@@ -432,7 +418,6 @@ Seemed awfully manual and ordered up there, didn't it? Just wait til Lab5 where
 we make it a lot less painful!
 
 ## Remote Deployment
-
 
 Now that we are satisfied that our containers and Kubernetes definitions work, 
 let's try deploying to "production" on a "deployment" server running Atomic Host.
@@ -475,8 +460,7 @@ oc create -f ~/workspace/wordpress/openshift/wordpress-service.yaml
 Now we should see similar results as our local machine from:
 
 ```bash
-oc get pods
-oc get services
+oc get all
 ```
 
 Again, before we access the service, let's expose the route.
@@ -487,8 +471,8 @@ oc expose svc/wordpress
 
 ```bash
 $ oc get routes
-NAME        HOST/PORT                                                 PATH      SERVICE     LABELS           INSECURE POLICY   TLS TERMINATION
-wordpress   wordpress-production.atomic-host.example.com            wordpress   name=wordpress 
+NAME        HOST/PORT                                      PATH      SERVICES    PORT      TERMINATION
+wordpress   wordpress-production.atomic-host.example.com             wordpress   80        
 ```
 
 And finally, access the site via the link:
@@ -506,3 +490,5 @@ project so all pods/services get cleaned up:
 ```
 oc delete project production
 ```
+
+As promised, in our [next lab](../lab5/chapter5.md) we'll demonstrate just how simple deployments can be with OpenShift.
