@@ -305,3 +305,5 @@ docker rm $(docker ps -qa)
 This command will result in a cosmetic error because it is trying to stop running 
 containers like the registry and the OpenShift containers that are running. These
 errors can safely be ignored.
+
+In the [next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab4/chapter4.md) we introduce container orchestration via OpenShift.
