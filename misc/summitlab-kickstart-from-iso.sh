@@ -30,8 +30,10 @@ timezone --utc America/New_York
 bootloader --location=mbr --driveorder=vda --append="crashkernel=auto"
 user --name=student --password=student --groups=libvirt
 #network --bootproto=static --ip=192.168.122.100 --netmask=255.255.255.0  --gateway=192.168.122.1 --nameserver=192.168.122.1
-network --bootproto=dhcp
+network --bootproto=dhcp --hostname workstation.example.com
 firstboot --disable
+firewall --disable
+services --enabled httpd
 repo --name=rhel-7-server-extras-rpms-local --baseurl=http://192.168.122.250/pub/rhel-7-server-extras-rpms 
 repo --name=rhel-7-server-optional-rpms-local --baseurl=http://192.168.122.250/pub/rhel-7-server-optional-rpms
 repo --name=rhel-7-server-ose-3.4-rpms-local --baseurl=http://192.168.122.250/pub/rhel-7-server-ose-3.4-rpms
@@ -54,6 +56,10 @@ docker
 git
 libvirt
 qemu-kvm
+vim
+emacs
+nano
+httpd
 %end
 
 
@@ -76,6 +82,13 @@ chmod +x /usr/local/bin/oc
 # Grab atomic qcow2
 curl -L http://192.168.122.1:8000/atomic.qcow2 >  /var/lib/libvirt/images/atomic.qcow2
 qemu-img create -f qcow2 -b /var/lib/libvirt/images/atomic.qcow2 /var/lib/libvirt/images/atomic-1.qcow2 
+
+# Grab yum repo+rpms
+curl -L http://192.168.122.1:8000/yumrepo.tar.gz > /var/www/html/yumrepo.tar.gz
+pushd /var/www/html/
+tar -xf yumrepo.tar.gz
+restorecon -vR ./
+popd
 
 # Gives extra performance to L2 guests
 echo "options kvm-intel nested=y" > /etc/modprobe.d/nestvirt.conf
