@@ -22,10 +22,18 @@ $ oc delete project devel --as=system:admin
 project "devel" deleted
 ```
 
+Ensure the following command displays "No resources found" before proceeding. It could take 10-30 seconds.
+```shell
+$ oc get project devel --as=system:admin
+No resources found.
+Error from server: namespaces "devel" not found
+```
+
 ```shell
 $ oc new-project devel
 Now using project "devel" on server "https://192.168.xx.xxx:8443".
 ```
+
 ## MariaDB templated deployment
 
 This time, let's save ourselves some work and avoid creating the MariaDB image, pod, or service.
