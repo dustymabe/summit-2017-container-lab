@@ -94,11 +94,12 @@ remains available"? Enter Kubernetes/OpenShift.
 ## Using OpenShift in the CDK
 
 Now login to our local OpenShift & create a new project:
+
 ```bash
-$ oc login -u developer -p developer
+oc login -u developer -p developer
 Using project "myproject".
 
-$ oc new-project devel
+oc new-project devel
 Now using project "devel" on server "https://192.168.xx.xxx:8443".
 ```
 
