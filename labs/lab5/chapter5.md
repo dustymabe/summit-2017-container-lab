@@ -46,7 +46,7 @@ $ oc get templates -n openshift
 
 Deploy the included mariadb offering... it's a one-liner:
 ```shell
-$ oc new-app --template=mariadb-ephemeral -p MYSQL_USER=user -p MYSQL_PASSWORD=mypass -p DATABASE_SERVICE_NAME=db
+$ oc new-app mariadb-ephemeral -p MYSQL_USER=user -p MYSQL_PASSWORD=mypass -p DATABASE_SERVICE_NAME=db
 --> Creating resources ...
     service "db" created
     deploymentconfig "db" created
@@ -69,7 +69,7 @@ The import completed successfully.
 
 Now, let's deploy our wordpress application, which  is configured via command-line to leverage our new DB instance.
 ```shell
-$ oc new-app wordpress -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypass -e DB_ENV_DBNAME=sampledb
+$ oc new-app --name wordpress -i wordpress -e DB_ENV_DBUSER=user -e DB_ENV_DBPASS=mypass -e DB_ENV_DBNAME=sampledb
 --> Creating resources ...
     deploymentconfig "wordpress" created
     service "wordpress" created
