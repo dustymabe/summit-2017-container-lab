@@ -125,4 +125,4 @@ $ virsh start atomic-host
 ```
 
 After you bring up this new machine you are then ready to move on to the
-[next lab](https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab1/chapter1.md).
+[next lab](../lab1/chapter1.md).
