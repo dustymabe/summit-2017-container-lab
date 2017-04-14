@@ -266,11 +266,11 @@ state, you can check out the logs from the OpenShift containers in multiple ways
 Here are a couple of options:
 
 ```bash
-$ oc logs mariadb
-$ oc describe pod mariadb
+oc logs mariadb
+oc describe pod mariadb
 
-$ oc logs wordpress
-$ oc describe pod wordpress
+oc logs wordpress
+oc describe pod wordpress
 ```
 
 Ok, now let's kill them off so we can introduce the services that will
