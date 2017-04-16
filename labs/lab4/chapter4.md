@@ -112,7 +112,7 @@ credentials to log in to ```https://cdk.example.com:8443``` using firefox.
 Let's get started by talking about a pod. A pod is a set of containers that provide 
 one "service." How do you know what to put in a particular pod? Well, a pod's containers
 need to be co-located on a host and need to be spawned and re-spawned together.
-So, if the containers always need to be running on the same docker host, well, then 
+So, if the containers always need to be running on the same container host, well, then 
 they should be a pod.
 
 **Note:** We will be putting this file together in steps to make it easier to explain 

@@ -199,7 +199,7 @@ Now we are ready to build the images to test our Dockerfiles.
 
         docker images
 
-1. Create the local minishift directories for persistent storage.
+1. Create the local directories within the minishift VM for persistent storage.
 
         minishift ssh "sudo mkdir -p /var/lib/mariadb /var/lib/wp_uploads"
 
@@ -208,8 +208,10 @@ Now we are ready to build the images to test our Dockerfiles.
 
   * `-d` to run in daemonized mode
   * `-v <host/path>:<container/path>:Z` to bindmount the directory for persistent storage.
-    The :Z option will label the content inside the container with the exact MCS label
-    that the container runs.
+    The :Z option will label the content inside the container with the exact SELinux MCS label
+    that the container runs. Below we'll inspect the labels on the
+    directories before and after we run the container to see the
+    changes on the labels in the directories
   * `-p <host_port>:<container_port>` to map the container port to the host port
 
             minishift ssh "ls -lZd /var/lib/mariadb"
@@ -223,7 +225,7 @@ Now we are ready to build the images to test our Dockerfiles.
   **Note**: the `curl` command does not return useful information but demonstrates 
             a response on the port.
 
-1. Test the Wordpress image to confirm connectivity. Additional run options:
+5. Test the Wordpress image to confirm connectivity. Additional run options:
   * `--link <name>:<alias>` to link to the database container
 
             minishift ssh "ls -lZd /var/lib/wp_uploads"
