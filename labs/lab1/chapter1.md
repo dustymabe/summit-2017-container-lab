@@ -141,8 +141,8 @@ Here you can see in the `FROM` command that we are pulling a RHEL 7 base image
 that we are going to build on. We are also adding a custom yum repo file. In disconnected 
 lab environments this file will be used to reference a local yum repository.
 In non-disconnected environments you will get access to content by
-registering the system. Registration is done for you in the CDK on bringup via
-Vagrant. Containers that are being built inherit the subscriptions of
+registering the system. Registration is done for you in the CDK on bringup.
+Containers that are being built inherit the subscriptions of
 the host they are running on, so you only need to register the host
 system.
 
@@ -173,7 +173,7 @@ docker ps
 Here we are using a few switches to configure the running container the way we 
 want it. We are running a `-dt` to run in detached mode with a psuedo TTY. Next
 we are mapping a port from the host to the container. We are being explicit here.
-We are telling docker to map port 80 on the host to port 80 in the container. 
+We are telling docker to map port 1080 on the host to port 80 in the container. 
 Now, we could have let docker handle the host side port mapping dynamically by 
 passing a `-p 80`, in which case docker would have randomly assigned a port to 
 the container. Finally, we passed in the name of the image that we built earlier.

@@ -97,7 +97,7 @@ We have two more commands worth mentioning. First off, let's mention `minishift 
 
 ## Container Development Kit (CDK) Walkthrough
 
-When we started minishift, we launched the software tooling component of the CDK. As we said before, the CDK provides a lot of support for containerizing your applications. However, the major software tool is minishift.
+When we started minishift, we launched the software tooling component of the CDK. As we said before, the CDK provides a lot of support for containerizing your applications, and the major software tool is minishift.
 
 However, what is minishift? Essentially, it is a simple to use and launch instance of the 
 same OpenShift PaaS you would use at work. Why is a PaaS included in a tool, 
@@ -112,7 +112,7 @@ in your OpenShift instance, if you open a browser. However, before we do that, w
 $ minishift ip
 192.168.???.??? 
 ```
-Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace "<ip>" with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `developer/developer` username/password.
+Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace `<ip>` with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `developer/developer` username/password.
 
 ## Setting Up For the Remaining Labs
 
