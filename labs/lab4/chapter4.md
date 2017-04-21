@@ -484,12 +484,4 @@ or
 point your browser to the URL
 ```
 
-
-Now, since we are done with the "production" server, let's delete the
-project so all pods/services get cleaned up:
-
-```
-oc delete project production
-```
-
-As promised, in our [next lab](../lab5/chapter5.md) we'll demonstrate just how simple deployments can be with OpenShift.
+As promised, in our [next lab](../lab5/chapter5.md) we'll demonstrate just how simple deployments can be with OpenShift templates.
