@@ -1,7 +1,7 @@
 ## Introduction
 
 In order to make this lab simple to work with, we are going to leverage
-a product known as the Container Development Kit (CDK). The CDK leverages a tool called [minishift](https://github.com/minishift/minishift) to setup a RHEL VM with docker and OpenShift already installed. Optionally, you can register with your Red Hat Account and actually get updates to the VM as well. The CDK also includes documentation, getting started and howto guides, and a community of users to learn from.
+a product known as the Container Development Kit (CDK). The CDK leverages a tool called [minishift](https://github.com/minishift/minishift) to setup a RHEL VM with docker and OpenShift already installed. You should register your minishift instance in order to access Red Hat content and be able to build in OpenShift and docker correctly. The CDK also includes documentation, getting started and howto guides, and a community of users to learn from.
 
 The key feature of minishift is a reliable, reproducible environment to iterate on. If you are unfamiliar with minishift that is OK, as we will cover the basics here. 
 
@@ -16,10 +16,7 @@ many tools in the Red Hat Container Ecosystem.
          and move directly to [Get Lab Materials](#get-lab-materials) as 
          the steps have already been performed on the machine you are using.
 
-In order to get the CDK, the easiest way is to head over to developers.redhat.com 
-and follow the "[install the Container Development Kit](http://developers.redhat.com/products/cdk/get-started/)" 
-instructions. The instructions cover installing the CDK on Windows, 
-MacOS, and Linux. 
+In order to get the CDK, the easiest way is to head over to developers.redhat.com and follow the "[install the Container Development Kit](http://developers.redhat.com/products/cdk/get-started/)" instructions. The instructions cover installing the CDK on Windows, MacOS, and Linux. 
 
 **NOTE** At the time of this writing, the CDK version we are using is CDK-3.0 
         which is still in beta so there are no installation docs as yet. 
@@ -27,8 +24,7 @@ MacOS, and Linux.
 
 ## Get Lab Materials
 
-For the convience of users of the lab, we created a script and installed 
-it on the Lab VM. If you are in the lab, please run the following:
+For the convience of users of the lab, we created a script and installed it on the Lab VM. If you are in the lab, please run the following:
 
 ```bash
 $ cd ~/
@@ -53,11 +49,12 @@ $ git clone https://github.com/dustymabe/summit-2017-container-lab
 
 Your major units of operation with minishift are `minishift start`, `minishift ssh`, 
 `minishift docker-env`, and `minishift stop`. We will walk through these. 
-Minishift has a number of other functions, some of which we will use later in the lab. However, these are the basics which warrant some examples to make sure you have enough context for the rest of the labs. We also need to get you access to the docker daemon running inside the minishift VM for the "docker Refresh" in Lab 1.  
+Minishift has a number of other functions, some of which we will use later in the lab. However, these are the basics which warrant some examples to make sure you have enough context for the rest of the labs. We also need to get you access to the docker daemon running inside the minishift VM for the "Docker Refresh" in Lab 1.  
 
-First, `minishift start`: this command asks your hypervisor to launch the virtual 
-machine minishift has prepared. The operation may be a "create and launch 
-VM" or a "re-launch an existing VM" and it is largely transparent to the user. 
+Before we begin, you need to configure the CDK for proper operation using `minishift setup-cdk`. You have a number of options here like choosing your hypervisor, config file location, etc. Covering these in detail is beyond the scope of this lab and is well documented with `minishift setup-cdk --help` or in the documentation linked above. For 
+the in-person lab we have already performed this step for you.
+
+Now to really start, `minishift start`: this command asks your hypervisor to launch the virtual machine minishift has prepared. The operation may be a "create and launch VM" or a "re-launch an existing VM" and it is largely transparent to the user. 
  
 OK, so, let's move in to our project directory and then launch minishift:
 
@@ -66,11 +63,16 @@ $ cd ~/summit-2017-container-lab
 $ minishift start --skip-registration
 ```
 
+**NOTE** If you following this lab at home, you should run just `minishift start`
+        and register with Red Hat. Otherwise, you may not have access to all the 
+        content used later in the lab(s). We can bypass it in the physical lab because 
+        we have the content replicated in the lab room.
+
 You should get a lot of feedback about the launch of the VM but, if you are 
 using the lab VM or have run this before, you will get a lot less. As long 
 as you don't get any errors you are in good shape.
 
-OK, so now minishift is started which means docker and OpenShift are up and running. We can now ask for the status (it's succinct!):
+OK, so now minishift is running which means docker and OpenShift are available. We can now ask for the status (it's succinct!):
 
 ```bash
 $ minishift status
@@ -97,13 +99,10 @@ We have two more commands worth mentioning. First off, let's mention `minishift 
 
 ## Container Development Kit (CDK) Walkthrough
 
-When we started minishift, we launched the software tooling component of the CDK. As we said before, the CDK provides a lot of support for containerizing your applications, and the major software tool is minishift.
+When we started minishift, we launched the software tooling component of the CDK. As we said before, the CDK provides a lot of support for containerizing your applications. However, the major software tool is minishift.
 
 However, what is minishift? Essentially, it is a simple to use and launch instance of the 
-same OpenShift PaaS you would use at work. Why is a PaaS included in a tool, 
-much less a lab, focused on Containers? Well, the latest version of OpenShift, 
-actually runs docker Containers to host your "Platform" (in the PaaS sense) 
-and your application.
+same OpenShift you would use at work. OpenShift, which you may remember as a PAAS providing "platforms" to build applications on, has evolved to be a complete container management solution. If you remember the "DIY Cartridges" from older versions of Openshift, essentially, OpenShift v3 has expanded the functionality to provide complete containers. Now, with OpenShift, you can build from a platform, build from scratch, whatever you can do in a container, and still get the complete lifecycle automation you loved in the older versions.
 
 If you would like to explore the OpenShift Console, you can see it running 
 in your OpenShift instance, if you open a browser. However, before we do that, we need the IP address of the VM minishift created. Easy enough, just run
@@ -112,7 +111,7 @@ in your OpenShift instance, if you open a browser. However, before we do that, w
 $ minishift ip
 192.168.???.??? 
 ```
-Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace `<ip>` with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `developer/developer` username/password.
+Ok, now we can check out the OpenShift console. Open Firefox from the Applications menu and navigate to `https://<ip>:8443/console/`(replace "<ip>" with the address from the last command). Once it loads (and you bypass the bad certificate error), you can log in to the console using the default `developer/developer` username/password.
 
 ## Setting Up For the Remaining Labs
 
