@@ -236,14 +236,21 @@ curl http://cdk.example.com:3306
 5. Test the Wordpress image to confirm connectivity. Additional run options:
   * `--link <name>:<alias>` to link to the database container
 
-            minishift ssh "ls -lZd /var/lib/wp_uploads"
-            docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
-            # Note the difference in SELinux context after running w/ a volume & :Z.
-            minishift ssh "ls -lZd /var/lib/wp_uploads"
-            docker logs $(docker ps -ql)
-            minishift ssh "ls -l /var/lib/wp_uploads"
-            docker ps
-            curl -L http://cdk.example.com:1080
+
+```
+minishift ssh "ls -lZd /var/lib/wp_uploads"
+docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
+```
+
+Note: See the difference in SELinux context after running w/ a volume & :Z.
+
+```
+minishift ssh "ls -lZd /var/lib/wp_uploads"
+docker logs $(docker ps -ql)
+minishift ssh "ls -l /var/lib/wp_uploads"
+docker ps
+curl -L http://cdk.example.com:1080
+```
 
 You may also load the Wordpress application in a browser to test its full functionality.
 
