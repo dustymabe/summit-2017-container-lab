@@ -214,13 +214,21 @@ Now we are ready to build the images to test our Dockerfiles.
     changes on the labels in the directories
   * `-p <host_port>:<container_port>` to map the container port to the host port
 
-            minishift ssh "ls -lZd /var/lib/mariadb"
-            docker run -d -v /var/lib/mariadb:/var/lib/mysql:Z -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
-            # Note the difference in SELinux context after running w/ a volume & :Z.
-            minishift ssh "ls -lZd /var/lib/mariadb"
-            docker logs $(docker ps -ql)
-            minishift ssh "ls -l /var/lib/mariadb"
-            curl http://cdk.example.com:3306
+
+```
+minishift ssh "ls -lZd /var/lib/mariadb"
+docker run -d -v /var/lib/mariadb:/var/lib/mysql:Z -p 3306:3306 -e DBUSER=user -e DBPASS=mypassword -e DBNAME=mydb --name mariadb mariadb
+```
+
+Note: See the difference in SELinux context after running w/ a volume & :Z.
+
+```
+minishift ssh "ls -lZd /var/lib/mariadb"
+docker logs $(docker ps -ql)
+minishift ssh "ls -l /var/lib/mariadb"
+curl http://cdk.example.com:3306
+```
+
 
   **Note**: the `curl` command does not return useful information but demonstrates 
             a response on the port.
@@ -228,14 +236,21 @@ Now we are ready to build the images to test our Dockerfiles.
 5. Test the Wordpress image to confirm connectivity. Additional run options:
   * `--link <name>:<alias>` to link to the database container
 
-            minishift ssh "ls -lZd /var/lib/wp_uploads"
-            docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
-            # Note the difference in SELinux context after running w/ a volume & :Z.
-            minishift ssh "ls -lZd /var/lib/wp_uploads"
-            docker logs $(docker ps -ql)
-            minishift ssh "ls -l /var/lib/wp_uploads"
-            docker ps
-            curl -L http://cdk.example.com:1080
+
+```
+minishift ssh "ls -lZd /var/lib/wp_uploads"
+docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
+```
+
+Note: See the difference in SELinux context after running w/ a volume & :Z.
+
+```
+minishift ssh "ls -lZd /var/lib/wp_uploads"
+docker logs $(docker ps -ql)
+minishift ssh "ls -l /var/lib/wp_uploads"
+docker ps
+curl -L http://cdk.example.com:1080
+```
 
 You may also load the Wordpress application in a browser to test its full functionality.
 
