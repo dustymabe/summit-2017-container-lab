@@ -30,27 +30,29 @@ No resources found.
 
 ## Wordpress templated deployment
 
-This time, let's simplify our deployment by creating an application template.
-
-Deploy the wordpress template file included w/ lab5:
+This time, let's simplify things by deploying an application template.  We've already included a template w/ lab5 which leverages our wordpress & mariadb images.
 ```shell
 $ cd ~/summit-2017-container-lab/labs/lab5/
+$ grep -i cdk.example.com wordpress-template.yaml
+```
 
+Let's deploy this wordpress template:
+```shell
 # add your template to the production project
 $ oc create -f wordpress-template.yaml
 template "wordpress" created
 
-# deploy your new template w/ "oc new-app" and notice its output
+# deploy your new template w/ "oc new-app" and note its output
 $ oc new-app --template wordpress
 --> Deploying template "production/wordpress" to project production
+```
 
-     * With parameters:
-        * MariaDB User=user
-        * MariaDB Password=df7mjvdXeccV # generated
-        * MariaDB Database Name=mydb
-
-# view all of the newly created resources
-$ oc get all
+Watch all of the newly created resources until the pods are in "Running" status... ctrl-c to exit
+```shell
+$ watch -n 5 oc get all
+NAME                   READY     STATUS    RESTARTS   AGE
+po/mariadb-1-nujmr     1/1	 Running   0          2m
+po/wordpress-1-pz9fu   1/1	 Running   0          2m
 
 # wait for the database to start... ctrl-c when done.
 $ oc logs -f dc/mariadb
@@ -71,7 +73,11 @@ or
 point your browser to the URL to view the GUI
 ```
 
-Minishift includes several other ready-made templates. Let's take a look:
+OpenShift includes several ready-made templates. Let's take a look at some of them:
 ```shell
 $ oc get templates -n openshift
 ```
+
+For more information on templates, reference the official OpenShift documentation:
+https://docs.openshift.com/container-platform/latest/dev_guide/templates.html
+https://docs.openshift.com/container-platform/latest/install_config/imagestreams_templates.html#is-templates-subscriptions
