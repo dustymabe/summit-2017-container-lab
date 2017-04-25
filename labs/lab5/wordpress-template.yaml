@@ -1,0 +1,239 @@
+kind: Template
+apiVersion: v1
+labels:
+  template: wordpress-template
+metadata:
+  name: wordpress
+  annotations:
+    openshift.io/display-name: "WordPress MariaDB Example" 
+    description: "An example WordPress application with a MariaDB database. \n\nFor more information see https://github.com/dustymabe/summit-2017-container-lab/blob/master/labs/lab5/chapter5.md"
+    tags: "wordpress,php,mariadb,summit"
+    iconClass: "icon-php"
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: mariadb
+    name: mariadb
+  spec:
+    tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: cdk.example.com:5000/mariadb:latest
+      importPolicy:
+        insecure: true
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: wordpress
+    name: wordpress
+  spec:
+    tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: cdk.example.com:5000/wordpress:latest
+      importPolicy:
+        insecure: true
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    generation: 1
+    labels:
+      app: wordpress
+    name: mariadb
+  spec:
+    replicas: 1
+    selector:
+      app: wordpress
+      deploymentconfig: mariadb
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: wordpress
+          deploymentconfig: mariadb
+      spec:
+        containers:
+        - env:
+          - name: DBNAME
+            value: ${DBNAME}
+          - name: DBPASS
+            value: ${DBPASS}
+          - name: DBUSER
+            value: ${DBUSER}
+          image: ''
+          imagePullPolicy: Always
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 3306
+            timeoutSeconds: 1
+          name: mariadb
+          ports:
+          - containerPort: 3306
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - MYSQL_PWD="$DBPASS" mysql -h 127.0.0.1 -u $DBUSER -D $DBNAME
+                -e 'SELECT 1'
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mariadb-volume-1
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        volumes:
+        - emptyDir: {}
+          name: mariadb-volume-1
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mariadb
+        from:
+          kind: ImageStreamTag
+          name: mariadb:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: wordpress
+    name: mariadb
+  spec:
+    ports:
+    - name: 3306-tcp
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      app: wordpress
+      deploymentconfig: mariadb
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    generation: 1
+    labels:
+      app: wordpress
+    name: wordpress
+  spec:
+    replicas: 1
+    selector:
+      app: wordpress
+      deploymentconfig: wordpress
+    strategy:
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: wordpress
+          deploymentconfig: wordpress
+      spec:
+        containers:
+        - env:
+          - name: DB_ENV_DBNAME
+            value: ${DBNAME}
+          - name: DB_ENV_DBPASS
+            value: ${DBPASS}
+          - name: DB_ENV_DBUSER
+            value: ${DBUSER}
+          image: ''
+          imagePullPolicy: Always
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 1
+          name: wordpress
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/www/html/wp-content/uploads
+            name: wordpress-volume-1
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        volumes:
+        - emptyDir: {}
+          name: wordpress-volume-1
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - wordpress
+        from:
+          kind: ImageStreamTag
+          name: wordpress:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: wordpress
+    name: wordpress
+    annotations:
+      "service.alpha.openshift.io/dependencies": "[{\"name\": \"mariadb\", \"kind\": \"Service\"}]"
+  spec:
+    ports:
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: wordpress
+      deploymentconfig: wordpress
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      app: wordpress
+    name: wordpress
+  spec:
+    host: ""
+    port:
+      targetPort: 80-tcp
+    to:
+      kind: Service
+      name: wordpress
+parameters:
+- description: Username for MariaDB user that will be used for accessing the database.
+  displayName: MariaDB User
+  from: user[A-Z0-9]{3}
+  name: DBUSER
+  required: true
+  value: user
+- description: Password for the MariaDB user.
+  displayName: MariaDB Password
+  from: '[a-zA-Z0-9]{12}'
+  name: DBPASS
+  required: true
+  generate: expression
+- description: Name of the MariaDB database accessed.
+  displayName: MariaDB Database Name
+  name: DBNAME
+  required: true
+  value: mydb
