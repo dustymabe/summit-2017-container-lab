@@ -239,7 +239,7 @@ curl http://cdk.example.com:3306
 
 ```
 minishift ssh "ls -lZd /var/lib/wp_uploads"
-docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
+docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/uploads:Z -p 1080:80 --link mariadb:db --name wordpress wordpress
 ```
 
 Note: See the difference in SELinux context after running w/ a volume & :Z.
@@ -247,7 +247,6 @@ Note: See the difference in SELinux context after running w/ a volume & :Z.
 ```
 minishift ssh "ls -lZd /var/lib/wp_uploads"
 docker logs $(docker ps -ql)
-minishift ssh "ls -l /var/lib/wp_uploads"
 docker ps
 curl -L http://cdk.example.com:1080
 ```
@@ -268,7 +267,7 @@ to copy+paste from README files.
 1. Edit `wordpress/Dockerfile` and add the following instruction near the bottom 
    of the file above the CMD line.
 
-        LABEL run docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content:Z -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
+        LABEL run docker run -d -v /var/lib/wp_uploads:/var/www/html/wp-content/uploads:Z -p 1080:80 --link=mariadb:db --name NAME -e NAME=NAME -e IMAGE=IMAGE IMAGE
         
 1. Rebuild the Wordpress image. The image cache will be used so only the changes 
    will need to be built.
