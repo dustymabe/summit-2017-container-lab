@@ -79,5 +79,7 @@ $ oc get templates -n openshift
 ```
 
 For more information on templates, reference the official OpenShift documentation:
-https://docs.openshift.com/container-platform/latest/dev_guide/templates.html
-https://docs.openshift.com/container-platform/latest/install_config/imagestreams_templates.html#is-templates-subscriptions
+
+[https://docs.openshift.com/container-platform/latest/dev_guide/templates.html](https://docs.openshift.com/container-platform/latest/dev_guide/templates.html)
+
+[https://docs.openshift.com/container-platform/latest/install_config/imagestreams_templates.html#is-templates-subscriptions](https://docs.openshift.com/container-platform/latest/install_config/imagestreams_templates.html#is-templates-subscriptions)
