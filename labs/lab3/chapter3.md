@@ -225,7 +225,7 @@ Note: See the difference in SELinux context after running w/ a volume & :Z.
 ```
 minishift ssh "ls -lZd /var/lib/mariadb"
 docker logs $(docker ps -ql)
-minishift ssh "ls -l /var/lib/mariadb"
+docker ps
 curl http://cdk.example.com:3306
 ```
 
