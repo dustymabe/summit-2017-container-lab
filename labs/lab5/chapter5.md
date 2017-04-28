@@ -86,22 +86,22 @@ For more information on templates, reference the official OpenShift documentatio
 
 ## Web console
 
-Now that we have deployed our template, let’s login as developer to the OpenShift web console at [https://atomic-host.example.com:8443](https://atomic-host.example.com:8443):
+Now that we have deployed our template, let’s login as developer to the OpenShift web console - [https://atomic-host.example.com:8443](https://atomic-host.example.com:8443):
 ![image not loading](images/1.png "Login")
 
-And after we’ve logged in, we see a list of projects that the developer user has access to:
+And after we’ve logged in, we see a list of projects that the developer user has access to. Let's select the `production` project:
 ![image not loading](images/2.png "Projects")
 
-We then select the `production` project to view our wordpress application overview:
+Our project landing page provides us with a high-level overview of our wordpress application's pods, services, and route:
 ![image not loading](images/3.png "Overview")
 
-Now we want to view a list of our pods by clicking on `Pods` in the left Applications menu:
+Let's dive a little deeper. We want to view a list of our pods by clicking on `Pods` in the left Applications menu:
 ![image not loading](images/4.png "Pods")
 
-Next, let's click on one of our running pods for more details:
+Next, let's click on one of our running pods for greater detail:
 ![image not loading](images/5.png "Wordpress")
 
-With this view, we have access to pod details like status, logs, image, volumes, and more:
+With this view, we have access to pod information like status, logs, image, volumes, and more:
 ![image not loading](images/6.png "PodDetails")
 
 Feel free to continue exploring the console and thanks for taking the lab!
