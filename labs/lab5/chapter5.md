@@ -83,3 +83,25 @@ For more information on templates, reference the official OpenShift documentatio
 [https://docs.openshift.com/container-platform/latest/dev_guide/templates.html](https://docs.openshift.com/container-platform/latest/dev_guide/templates.html)
 
 [https://docs.openshift.com/container-platform/latest/install_config/imagestreams_templates.html#is-templates-subscriptions](https://docs.openshift.com/container-platform/latest/install_config/imagestreams_templates.html#is-templates-subscriptions)
+
+## Web console
+
+Now that we have deployed our template, let’s login as developer to the OpenShift web console at [https://atomic-host.example.com:8443](https://atomic-host.example.com:8443):
+![image not loading](images/1.png "Login")
+
+And after we’ve logged in, we see a list of projects that the developer user has access to:
+![image not loading](images/2.png "Projects")
+
+We then select the `production` project to view our wordpress application overview:
+![image not loading](images/3.png "Overview")
+
+Now we want to view a list of our pods by clicking on `Pods` in the left Applications menu:
+![image not loading](images/4.png "Pods")
+
+Next, let's click on one of our running pods for more details:
+![image not loading](images/5.png "Wordpress")
+
+With this view, we have access to pod details like status, logs, image, volumes, and more:
+![image not loading](images/6.png "PodDetails")
+
+Feel free to continue exploring the console and thanks for taking the lab!
